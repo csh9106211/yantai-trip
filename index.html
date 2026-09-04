@@ -783,7 +783,7 @@
             const previewPills = item.dishes.map(d => `
                 <div class="flex justify-between items-center py-1 border-b border-slate-100 last:border-none">
                     <div class="flex items-center gap-1.5 overflow-hidden">
-                        <span class="text-[11px] font-bold text-slate-800 truncate">${d.name}</span>
+                        <span class="text-[11px] font-bold text-slate-800 truncate">${d.korean || d.name}</span>
                         <span class="text-[10px] font-black text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded shrink-0">${d.pronun}</span>
                     </div>
                     <span class="text-[10px] font-black text-amber-700 shrink-0 ml-1">${d.price}</span>
@@ -793,7 +793,7 @@
             return `
                 <div class="rest-card bg-white rounded-3xl p-4 shadow-sm border border-slate-200 space-y-3 card-clickable" 
                      data-id="${item.id}"
-                     data-name="${item.name} ${item.chinese_name} ${item.dishes.map(d=>d.name + ' ' + d.chinese).join(' ')}"
+                     data-name="${item.name} ${item.chinese_name} ${item.dishes.map(d=>(d.korean || '') + ' ' + d.name + ' ' + (d.pronun || '')).join(' ')}"
                      onclick="openDishModalById('${item.id}')">
                     
                     <!-- 식당 메인 썸네일 & 배지 -->
@@ -994,10 +994,10 @@
                     <div class="space-y-1">
                         <div class="flex justify-between items-start">
                             <div>
-                                <h5 class="text-sm font-black text-slate-900">${d.name}</h5>
-                                <p class="text-xs font-extrabold text-amber-700">${d.chinese}</p>
+                                <h5 class="text-sm font-black text-slate-900">${d.korean || d.name}</h5>
+                                <p class="text-xs font-extrabold text-amber-700">${d.name} <span class="text-slate-500 font-normal">[${d.pronun}]</span></p>
                             </div>
-                            <span class="text-xs font-black text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200">
+                            <span class="text-xs font-black text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200 shrink-0">
                                 🗣️ ${d.pronun}
                             </span>
                         </div>
@@ -1008,11 +1008,11 @@
 
                     <!-- 원터치 주문 및 발음 버튼 -->
                     <div class="grid grid-cols-4 gap-1.5 pt-1">
-                        <button onclick="speakChinese('${d.chinese}')"
+                        <button onclick="speakChinese('${d.name}')"
                                 class="col-span-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-2 rounded-xl text-[11px] border border-indigo-200 flex items-center justify-center gap-1">
                             <span>🔊</span> 발음
                         </button>
-                        <button onclick="showPronunOrderModal('我要一份：${d.chinese}', '${d.pronun}', '${d.name}')" 
+                        <button onclick="showPronunOrderModal('我要一份：${d.name}', '${d.pronun}', '${d.korean || d.name}')" 
                                 class="col-span-3 bg-rose-600 hover:bg-rose-700 text-white font-black py-2 rounded-xl text-center text-xs shadow-xs transition flex items-center justify-center gap-1">
                             <span>🗣️</span> 이 메뉴 1인분 주문하기
                         </button>
@@ -1032,7 +1032,13 @@
             currentOrderChineseText = chineseText;
             document.getElementById('modalOrderChinese').innerText = chineseText;
             document.getElementById('modalOrderKoreanMean').innerText = meanText ? '메뉴: ' + meanText : '';
-            document.getElementById('modalOrderPronun').innerText = '"' + pronunText + '"';
+            
+            // 발음 안내문구: 이미 문장이면 그대로, 단어면 주문 문장으로 완성
+            let fullPronun = pronunText;
+            if (!pronunText.includes('워 야오') && !pronunText.includes('라이')) {
+                fullPronun = '워 야오 이펀, ' + pronunText + '!';
+            }
+            document.getElementById('modalOrderPronun').innerText = '"' + fullPronun + '"';
             document.getElementById('pronunOrderModal').classList.remove('hidden');
         }
 
