@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- 바이두 실제 크롤링 이미지 hotlink 차단 방지 -->
+    <meta name="referrer" content="no-referrer">
+    <title>연태 2박3일 찐로컬 실전 완벽 가이드</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { -webkit-tap-highlight-color: transparent; }
+        body { 
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; 
+            word-break: keep-all; 
+            overflow-wrap: break-word; 
+        }
+        h1, h2, h3, h4, h5, p, span, strong, div {
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .tab-btn.active {
+            background-color: #0f172a;
+            color: #ffffff;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+        }
+        .tab-btn {
+            background-color: #f1f5f9;
+            color: #475569;
+            font-weight: 600;
+        }
+        .card-clickable {
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .card-clickable:active {
+            transform: scale(0.98);
+        }
+        .img-box {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        }
+        .fav-active {
+            color: #f43f5e !important;
+            transform: scale(1.15);
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased pb-32">
+
+    <!-- 상단 고정 헤더 -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-3 shadow-xs">
+        <div class="max-w-md mx-auto">
+            <div class="flex justify-between items-center">
+                <div>
+                    <span class="text-[10px] font-black tracking-wider text-rose-600 uppercase bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200 flex items-center gap-1 w-fit">
+                        <span>❤️</span> 커플 여행 완벽판 · 한글발음 & 음성듣기 탑재
+                    </span>
+                    <h1 class="text-lg font-black text-slate-900 mt-0.5 flex items-center gap-1.5">
+                        <span>🇨🇳 옌타이 2박 3일 실전 여행 가이드</span>
+                    </h1>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <button onclick="openLoveModal()" class="bg-rose-50 hover:bg-rose-100 active:bg-rose-200 text-rose-600 px-2.5 py-1.5 rounded-full text-xs font-black transition flex items-center gap-1 border border-rose-200 shadow-xs">
+                        <span>💖</span> 수진이에게
+                    </button>
+                    <button onclick="shareLink()" class="bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 px-2.5 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1 border border-slate-200 shadow-xs">
+                        <span>🔗</span> 공유
+                    </button>
+                </div>
+            </div>
+
+            <!-- 검색 입력창 -->
+            <div class="mt-2.5 relative">
+                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="🔍 식당명, 메뉴(양꼬치, 삼치만두, 개불, 사과 등) 검색..."
+                    class="w-full bg-slate-100 text-xs text-slate-800 pl-3 pr-8 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 transition placeholder-slate-400">
+                <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-sm font-bold">✕</button>
+            </div>
+
+            <!-- 상단 탭 네비게이션 (가로 스크롤) -->
+            <div class="flex gap-1.5 mt-2.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+                <button onclick="switchTab('all')" id="tab-all" class="tab-btn active px-3.5 py-1.5 rounded-full whitespace-nowrap transition">전체 (40곳)</button>
+                <button onclick="switchTab('fav')" id="tab-fav" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition text-rose-600">❤️ 내 찜 목록 (<span id="favCountBadge">0</span>)</button>
+                <button onclick="switchTab('romance')" id="tab-romance" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition">💑 데이트 & 야경 (TOP 6)</button>
+                <button onclick="switchTab('dessert')" id="tab-dessert" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition">🧋 밀크티 & 과일 & 생존팁</button>
+                <button onclick="switchTab('liquor')" id="tab-liquor" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition">🗣️ 중국어 발음 & 술 주문</button>
+                <button onclick="switchTab('day1')" id="tab-day1" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition">토 저녁 (해산물 10곳)</button>
+                <button onclick="switchTab('day2_lunch')" id="tab-day2_lunch" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition">일 점심 (양마도 10곳)</button>
+                <button onclick="switchTab('day2_dinner')" id="tab-day2_dinner" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition">일 저녁 (양꼬치 10곳)</button>
+                <button onclick="switchTab('day3')" id="tab-day3" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition">월 아침 (조식 10곳)</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 컨테이너 -->
+    <main class="max-w-md mx-auto p-4 space-y-6">
+
+        <!-- 검색 결과 안내 문구 -->
+        <div id="searchNotice" class="hidden bg-amber-50 border border-amber-200 rounded-2xl p-3 text-xs text-amber-900 flex justify-between items-center">
+            <span>검색 결과: <strong id="searchCount">0</strong>곳 발견</span>
+            <button onclick="clearSearch()" class="text-xs font-bold text-amber-700 underline">전체 보기</button>
+        </div>
+
+        <!-- ❤️ 찜 목록 안내 (찜 탭 활성화 시 노출) -->
+        <div id="favEmptyNotice" class="hidden bg-rose-50 border border-rose-200 rounded-2xl p-6 text-center space-y-2">
+            <span class="text-3xl">🤍</span>
+            <h3 class="text-sm font-extrabold text-slate-800">아직 찜한 식당이 없습니다!</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+                식당 카드의 <strong>우측 상단 하트(🤍)</strong>를 누르면 둘만의 맛집 리스트에 쏙 담깁니다.
+            </p>
+            <button onclick="switchTab('all')" class="mt-2 bg-rose-600 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-xs">
+                전체 맛집 둘러보기
+            </button>
+        </div>
+
+        <!-- 💑 [NEW] 옌타이 로맨틱 데이트 & 야경 스팟 TOP 6 -->
+        <section id="sec-romance" class="space-y-4">
+            <div class="flex items-center justify-between pt-1">
+                <div class="flex items-center gap-2">
+                    <span class="bg-rose-500 text-white text-xs font-black px-2 py-0.5 rounded">여자친구 심쿵</span>
+                    <h2 class="text-xl font-extrabold text-slate-900">💑 옌타이 데이트 & 야경 TOP 6</h2>
+                </div>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+                맛있는 밥을 먹은 뒤 손잡고 걷기 좋은 낭만 스팟 6곳입니다. 사진 포인트와 택시 기사님 카드가 포함되어 있습니다!
+            </p>
+
+            <div id="romanceSpotsContainer" class="space-y-4">
+                <!-- JS로 동적 렌더링 -->
+            </div>
+        </section>
+
+        <!-- 🧋 [NEW] 디저트(헤이티), 명물 과일, 생존 꿀팁 가이드 -->
+        <section id="sec-dessert" class="space-y-4">
+            <div class="flex items-center gap-2 pt-1">
+                <span class="bg-purple-600 text-white text-xs font-black px-2 py-0.5 rounded">디저트&생존</span>
+                <h2 class="text-xl font-extrabold text-slate-900">🧋 헤이티 밀크티 & 과일 & 생존팁</h2>
+            </div>
+            
+            <p class="text-xs text-slate-600 leading-relaxed">
+                여자친구가 무조건 좋아하는 중국 No.1 음료와 현지 과일 깎아먹기, 식당 필수 표현입니다!
+            </p>
+
+            <!-- 1. 헤이티(HEYTEA) 주문 공식 -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
+                <div class="flex justify-between items-center text-xs text-purple-700 font-bold bg-purple-50 px-3 py-1.5 rounded-xl border border-purple-100">
+                    <span>🍇 중국 1등 밀크티 '헤이티 (喜茶)' 주문</span>
+                    <span>실패 없는 황금 비율</span>
+                </div>
+
+                <div class="space-y-2.5 text-xs">
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="bg-purple-100 text-purple-800 text-[10px] font-black px-2 py-0.5 rounded">시그니처 1위 ⭐⭐⭐</span>
+                                <h4 class="text-sm font-black text-slate-900 mt-1">多肉葡萄 [뚜오로우 푸타오]</h4>
+                                <p class="text-[11px] text-slate-500">생포도 과육이 가득 씹히는 치즈폼 슬러시</p>
+                            </div>
+                            <button onclick="speakChinese('多肉葡萄，半糖，少冰')" class="bg-purple-50 hover:bg-purple-100 text-purple-700 p-2 rounded-xl border border-purple-200 flex items-center gap-1 font-bold text-xs">
+                                <span>🔊</span> 음성
+                            </button>
+                        </div>
+                        <div class="bg-white p-2.5 rounded-lg border border-slate-200 space-y-1">
+                            <p class="font-extrabold text-purple-700">🥤 여자친구 감동 주문 공식:</p>
+                            <p class="text-slate-800 font-bold text-xs">"我要一杯多肉葡萄，半糖，少冰，要芝士"</p>
+                            <p class="text-slate-600 text-[11px] font-semibold">🗣️ [워 야오 이베이 뚜오로우 푸타오, 반탕, 샤오빙, 야오 즈스!]</p>
+                            <p class="text-[10px] text-slate-400">뜻: 포도 슬러시 1잔, 당도 50%, 얼음 적게, 치즈폼 올려주세요</p>
+                        </div>
+                        <button onclick="showPronunOrderModal('我要一杯多肉葡萄，半糖，少冰，要芝士', '워 야오 이베이 뚜오로우 푸타오, 반탕, 샤오빙, 야오 즈스!', '헤이티 포도 슬러시 (당도50%, 얼음적게, 치즈폼)')" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-xl text-center text-xs shadow-xs">
+                            📱 화면으로 주문 보여주기
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 옌타이 명물 과일 & 깎아달라 하기 -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
+                <div class="flex justify-between items-center text-xs text-rose-700 font-bold bg-rose-50 px-3 py-1.5 rounded-xl border border-rose-100">
+                    <span>🍎 옌타이 특산 과일 & 깎아먹기</span>
+                    <span>과일가게/마트 필수 팁</span>
+                </div>
+
+                <p class="text-[11px] text-slate-600">
+                    옌타이는 중국에서 가장 유명한 과일의 본고장입니다! 호텔 근처 과일가게(鲜丰水果 등)에서 사서 꼭 드셔보세요.
+                </p>
+
+                <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                        <span class="text-xl">🍎</span>
+                        <p class="font-black text-slate-900 mt-1">연태 사과</p>
+                        <p class="text-[10px] text-slate-500">烟台苹果</p>
+                        <p class="text-[10px] text-rose-600 font-bold">[옌타이 핑궈]</p>
+                    </div>
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                        <span class="text-xl">🍒</span>
+                        <p class="font-black text-slate-900 mt-1">대왕 체리</p>
+                        <p class="text-[10px] text-slate-500">大樱桃</p>
+                        <p class="text-[10px] text-rose-600 font-bold">[다잉타오]</p>
+                    </div>
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                        <span class="text-xl">🍑</span>
+                        <p class="font-black text-slate-900 mt-1">꿀 복숭아</p>
+                        <p class="text-[10px] text-slate-500">水蜜桃</p>
+                        <p class="text-[10px] text-rose-600 font-bold">[수이미타오]</p>
+                    </div>
+                </div>
+
+                <!-- 깎아주세요 꿀팁 -->
+                <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 space-y-1.5">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-black text-amber-900">🔪 과일 깎아서 썰어달라고 할 때:</span>
+                        <button onclick="speakChinese('请帮我削皮切块')" class="text-amber-800 text-xs font-bold flex items-center gap-1">
+                            <span>🔊</span> 발음
+                        </button>
+                    </div>
+                    <p class="text-sm font-black text-slate-900">"请帮我削皮切块"</p>
+                    <p class="text-xs font-bold text-amber-700">🗣️ [칭방워 샤오피 치에콰이!]</p>
+                    <p class="text-[11px] text-slate-600">뜻: 껍질 벗겨서 한 입 크기로 잘라주세요 (박스에 꼬치와 함께 담아줍니다!)</p>
+                </div>
+            </div>
+
+            <!-- 3. 식당 생존 필수 아이템 4종 -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
+                <div class="flex justify-between items-center text-xs text-blue-700 font-bold bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-100">
+                    <span>⚡ 식당 요청 필수 4종 (찬물·물티슈·앞접시)</span>
+                    <span>터치하여 음성 듣기</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <!-- 찬물 -->
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 space-y-1">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] text-slate-500 font-bold">얼음물/찬물</span>
+                            <button onclick="speakChinese('请给我冰水')" class="text-slate-400 hover:text-slate-700">🔊</button>
+                        </div>
+                        <p class="text-sm font-black text-slate-900">冰水 [빙수이]</p>
+                        <p class="text-[10px] text-slate-500">기본 차는 뜨거우니 찬물 요청</p>
+                    </div>
+
+                    <!-- 물티슈 -->
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 space-y-1">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] text-slate-500 font-bold">물티슈</span>
+                            <button onclick="speakChinese('要湿纸巾')" class="text-slate-400 hover:text-slate-700">🔊</button>
+                        </div>
+                        <p class="text-sm font-black text-slate-900">湿纸巾 [스즈진]</p>
+                        <p class="text-[10px] text-slate-500">1~2위안 유료인 경우 많음</p>
+                    </div>
+
+                    <!-- 앞접시 -->
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 space-y-1">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] text-slate-500 font-bold">앞접시 추가</span>
+                            <button onclick="speakChinese('加两个小碗')" class="text-slate-400 hover:text-slate-700">🔊</button>
+                        </div>
+                        <p class="text-sm font-black text-slate-900">小碗 [샤오완]</p>
+                        <p class="text-[10px] text-slate-500">앞접시 2개 더 주세요</p>
+                    </div>
+
+                    <!-- 숟가락 -->
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 space-y-1">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] text-slate-500 font-bold">숟가락</span>
+                            <button onclick="speakChinese('请给我勺子')" class="text-slate-400 hover:text-slate-700">🔊</button>
+                        </div>
+                        <p class="text-sm font-black text-slate-900">勺子 [샤오즈]</p>
+                        <p class="text-[10px] text-slate-500">국물 먹을 때 필수</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🗣️ [SPECIAL] 필수 중국어 발음 & 술 주문 가이드 -->
+        <section id="sec-liquor" class="space-y-4">
+            <div class="flex items-center gap-2 pt-1">
+                <span class="bg-rose-600 text-white text-xs font-black px-2 py-0.5 rounded">필독</span>
+                <h2 class="text-xl font-extrabold text-slate-900">🗣️ 필수 실전 중국어 발음 & 술 주문</h2>
+            </div>
+            
+            <p class="text-xs text-slate-600 leading-relaxed">
+                식당이나 택시에서 한국어 발음대로 읽기만 하면 중국인 직원과 기사님이 1초 만에 알아듣습니다!
+            </p>
+
+            <!-- 1. 식당 필수 4대 만능 회화 카드 -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
+                <div class="flex justify-between items-center text-xs text-indigo-700 font-bold bg-indigo-50 px-3 py-1.5 rounded-xl border border-indigo-100">
+                    <span>⚡ 식당 필수 4대 만능 회화</span>
+                    <span>한국어 발음대로 읽으세요</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <!-- 저기요! -->
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 space-y-1 relative">
+                        <button onclick="speakChinese('服务员')" class="absolute top-2 right-2 text-slate-400 hover:text-indigo-600">🔊</button>
+                        <div class="flex justify-between items-center pr-5">
+                            <span class="text-[10px] text-slate-500 font-bold">직원 부를 때</span>
+                            <span class="text-rose-600 font-black">服务员!</span>
+                        </div>
+                        <p class="text-sm font-black text-slate-900">"푸우위안!"</p>
+                        <p class="text-[10px] text-slate-500">저기요! / 직원분!</p>
+                    </div>
+
+                    <!-- 계산이요! -->
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 space-y-1 relative">
+                        <button onclick="speakChinese('买单')" class="absolute top-2 right-2 text-slate-400 hover:text-indigo-600">🔊</button>
+                        <div class="flex justify-between items-center pr-5">
+                            <span class="text-[10px] text-slate-500 font-bold">계산할 때</span>
+                            <span class="text-rose-600 font-black">买单!</span>
+                        </div>
+                        <p class="text-sm font-black text-slate-900">"마이단!"</p>
+                        <p class="text-[10px] text-slate-500">계산해 주세요!</p>
+                    </div>
+
+                    <!-- 고수 빼주세요! -->
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 space-y-1 relative">
+                        <button onclick="speakChinese('不要香菜')" class="absolute top-2 right-2 text-slate-400 hover:text-indigo-600">🔊</button>
+                        <div class="flex justify-between items-center pr-5">
+                            <span class="text-[10px] text-slate-500 font-bold">고수 빼기</span>
+                            <span class="text-rose-600 font-black">不要香菜</span>
+                        </div>
+                        <p class="text-sm font-black text-slate-900">"부 야오 시앙차이!"</p>
+                        <p class="text-[10px] text-slate-500">고수 넣지 마세요</p>
+                    </div>
+
+                    <!-- 이거 1개 주세요! -->
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 space-y-1 relative">
+                        <button onclick="speakChinese('来一份这个')" class="absolute top-2 right-2 text-slate-400 hover:text-indigo-600">🔊</button>
+                        <div class="flex justify-between items-center pr-5">
+                            <span class="text-[10px] text-slate-500 font-bold">메뉴판 가리키며</span>
+                            <span class="text-rose-600 font-black">来一份这个</span>
+                        </div>
+                        <p class="text-sm font-black text-slate-900">"라이 이펀 저거!"</p>
+                        <p class="text-[10px] text-slate-500">이거 하나 주세요</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 백주 3종 카드 -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
+                <div class="flex justify-between items-center text-xs text-rose-700 font-bold bg-rose-50 px-3 py-1.5 rounded-xl border border-rose-100">
+                    <span>🔥 백주 (白酒 - 바이주) 주문 발음</span>
+                    <span>직원에게 말하거나 보여주세요</span>
+                </div>
+
+                <div class="space-y-2.5 text-xs">
+                    <!-- 강소백 -->
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1.5">
+                        <div class="flex justify-between items-center">
+                            <strong class="text-slate-900 text-sm">1. 강소백 (江小白)</strong>
+                            <span class="bg-rose-100 text-rose-800 text-[10px] font-black px-2 py-0.5 rounded">소주파 강추 ⭐</span>
+                        </div>
+                        <div class="bg-white p-2 rounded-lg border border-slate-200 flex justify-between items-center">
+                            <div>
+                                <span class="text-base font-black text-rose-600">江小白</span>
+                                <span class="text-xs font-black text-slate-900 ml-1.5">🗣️ [장샤오바이]</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="speakChinese('我要一瓶江小白')" class="bg-slate-100 text-slate-700 text-xs p-1.5 rounded-lg border border-slate-300">
+                                    🔊
+                                </button>
+                                <button onclick="showPronunOrderModal('我要一瓶江小白', '워 야오 이핑 장샤오바이!', '강소백 1병 주세요')" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-[10px] font-bold px-2 py-1 rounded-lg border border-rose-200">
+                                    🗣️ 주문 화면
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 text-[11px]">
+                            향이 적고 뒷맛이 깔끔해 <strong>한국 소주</strong>와 가장 비슷합니다. (도수 약 40도)
+                        </p>
+                    </div>
+
+                    <!-- 연태고량주 -->
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1.5">
+                        <div class="flex justify-between items-center">
+                            <strong class="text-slate-900 text-sm">2. 연태고량주 (烟台古酿)</strong>
+                            <span class="bg-amber-100 text-amber-800 text-[10px] font-black px-2 py-0.5 rounded">원조 본고장</span>
+                        </div>
+                        <div class="bg-white p-2 rounded-lg border border-slate-200 flex justify-between items-center">
+                            <div>
+                                <span class="text-base font-black text-amber-600">烟台古酿</span>
+                                <span class="text-xs font-black text-slate-900 ml-1.5">🗣️ [옌타이 구냥]</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="speakChinese('我要一瓶烟台古酿')" class="bg-slate-100 text-slate-700 text-xs p-1.5 rounded-lg border border-slate-300">
+                                    🔊
+                                </button>
+                                <button onclick="showPronunOrderModal('我要一瓶烟台古酿', '워 야오 이핑 옌타이구냥!', '연태고량주 1병 주세요')" class="bg-amber-50 hover:bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-1 rounded-lg border border-amber-200">
+                                    🗣️ 주문 화면
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 text-[11px]">
+                            한국의 1/3 가격! 은은한 파인애플 과일 향과 부드러운 목넘김. (도수 34~38도)
+                        </p>
+                    </div>
+
+                    <!-- 장위 백주 -->
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1.5">
+                        <div class="flex justify-between items-center">
+                            <strong class="text-slate-900 text-sm">3. 장위 백주 (张裕白酒)</strong>
+                            <span class="bg-slate-200 text-slate-800 text-[10px] font-black px-2 py-0.5 rounded">로컬 픽</span>
+                        </div>
+                        <div class="bg-white p-2 rounded-lg border border-slate-200 flex justify-between items-center">
+                            <div>
+                                <span class="text-base font-black text-slate-800">张裕白酒</span>
+                                <span class="text-xs font-black text-slate-900 ml-1.5">🗣️ [장위 바이주]</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="speakChinese('我要一瓶张裕白酒')" class="bg-slate-100 text-slate-700 text-xs p-1.5 rounded-lg border border-slate-300">
+                                    🔊
+                                </button>
+                                <button onclick="showPronunOrderModal('我要一瓶张裕白酒', '워 야오 이핑 장위바이주!', '장위백주 1병 주세요')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold px-2 py-1 rounded-lg border border-slate-300">
+                                    🗣️ 주문 화면
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 맥주 & 차가운 맥주 주문법 -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
+                <div class="flex justify-between items-center text-xs text-amber-700 font-bold bg-amber-50 px-3 py-1.5 rounded-xl border border-amber-100">
+                    <span>🍺 맥주 (啤酒 - 피주) 주문 발음</span>
+                    <span>시원하게 마시기</span>
+                </div>
+
+                <div class="space-y-2 text-xs">
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex justify-between items-center">
+                        <div>
+                            <div class="flex items-center gap-1.5">
+                                <strong class="text-slate-900 text-sm">青岛原浆</strong>
+                                <span class="text-emerald-700 font-extrabold text-xs">🗣️ [칭다오 위안지앙]</span>
+                            </div>
+                            <span class="text-slate-500 text-[11px] block mt-0.5">효모가 살아있는 당일 생산 생맥주 (강추 ⭐⭐⭐)</span>
+                        </div>
+                        <button onclick="speakChinese('青岛原浆')" class="text-slate-400 hover:text-emerald-600 text-sm">🔊</button>
+                    </div>
+
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex justify-between items-center">
+                        <div>
+                            <div class="flex items-center gap-1.5">
+                                <strong class="text-slate-900 text-sm">青岛纯生</strong>
+                                <span class="text-blue-700 font-extrabold text-xs">🗣️ [칭다오 춘셩]</span>
+                            </div>
+                            <span class="text-slate-500 text-[11px] block mt-0.5">부드럽고 신선한 맛 (한국의 카스/테라 느낌)</span>
+                        </div>
+                        <button onclick="speakChinese('青岛纯生')" class="text-slate-400 hover:text-blue-600 text-sm">🔊</button>
+                    </div>
+
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex justify-between items-center">
+                        <div>
+                            <div class="flex items-center gap-1.5">
+                                <strong class="text-slate-900 text-sm">烟台啤酒</strong>
+                                <span class="text-amber-700 font-extrabold text-xs">🗣️ [옌타이 피주]</span>
+                            </div>
+                            <span class="text-slate-500 text-[11px] block mt-0.5">연태 현지 로컬 라거 맥주 (가성비 최고)</span>
+                        </div>
+                        <button onclick="speakChinese('烟台啤酒')" class="text-slate-400 hover:text-amber-600 text-sm">🔊</button>
+                    </div>
+                </div>
+
+                <!-- 차가운 맥주 팁 -->
+                <div class="bg-blue-50 p-3 rounded-xl border border-blue-200 space-y-1 text-xs">
+                    <div class="flex justify-between items-center">
+                        <span class="font-extrabold text-blue-900">❄️ 차가운 맥주 달라고 할 때:</span>
+                        <button onclick="speakChinese('要冰的啤酒')" class="text-blue-700 text-xs font-bold flex items-center gap-1">
+                            <span>🔊</span> 음성
+                        </button>
+                    </div>
+                    <p class="font-black text-slate-900 text-sm">"要冰的啤酒!"</p>
+                    <p class="text-blue-700 font-bold">🗣️ [야오 빙더 피주!]</p>
+                    <p class="text-slate-600 text-[11px]">중국은 상온 맥주를 기본으로 주므로, 반드시 <strong>"빙더(冰的)"</strong>라고 외치세요!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1. Day 1 저녁: 해산물/교자 (10곳) -->
+        <section id="sec-day1" class="space-y-4">
+            <div class="flex items-center gap-2 pt-1">
+                <span class="bg-amber-600 text-white text-xs font-black px-2 py-0.5 rounded">토요일 저녁</span>
+                <h2 class="text-xl font-extrabold text-slate-900">🦐 1일차 저녁: 연태 해산물 & 만두 (10곳)</h2>
+            </div>
+            <p class="text-xs text-slate-600">
+                연태에 도착하자마자 맛보는 백년 전통 해산물 요리와 전설의 삼치 만두 명가들입니다.
+            </p>
+            <div id="list-day1" class="space-y-4"></div>
+        </section>
+
+        <!-- 2. Day 2 점심: 양마도 바다 해산물 (10곳) -->
+        <section id="sec-day2-lunch" class="space-y-4">
+            <div class="flex items-center gap-2 pt-1">
+                <span class="bg-emerald-600 text-white text-xs font-black px-2 py-0.5 rounded">일요일 점심</span>
+                <h2 class="text-xl font-extrabold text-slate-900">🏝️ 2일차 점심: 양마도 갓 잡은 신선 어촌 밥상 (10곳)</h2>
+            </div>
+            <p class="text-xs text-slate-600">
+                동방의 몰디브 양마도에서 바다를 바라보며 즐기는 활어회, 성게, 가리비, 해물 철판찜 명가입니다.
+            </p>
+            <div id="list-day2-lunch" class="space-y-4"></div>
+        </section>
+
+        <!-- 3. Day 2 저녁: 숯불 양꼬치 & 야시장 (10곳) -->
+        <section id="sec-day2-dinner" class="space-y-4">
+            <div class="flex items-center gap-2 pt-1">
+                <span class="bg-purple-600 text-white text-xs font-black px-2 py-0.5 rounded">일요일 저녁</span>
+                <h2 class="text-xl font-extrabold text-slate-900">🍢 2일차 저녁: 숯불 양꼬치 & 야시장 핫플 (10곳)</h2>
+            </div>
+            <p class="text-xs text-slate-600">
+                칭다오 생맥주와 함께 즐기는 육즙 팡팡 생양꼬치, 마늘구이, 해산물 숯불 바베큐 명가들입니다.
+            </p>
+            <div id="list-day2-dinner" class="space-y-4"></div>
+        </section>
+
+        <!-- 4. Day 3 아침: 로컬 조식 & 훈툰 (10곳) -->
+        <section id="sec-day3" class="space-y-4">
+            <div class="flex items-center gap-2 pt-1">
+                <span class="bg-indigo-600 text-white text-xs font-black px-2 py-0.5 rounded">월요일 아침</span>
+                <h2 class="text-xl font-extrabold text-slate-900">🥣 3일차 아침: 뜨끈한 훈툰·샤오롱바오·도넛 (10곳)</h2>
+            </div>
+            <p class="text-xs text-slate-600">
+                아침 일찍 문을 여는 30년 전통 완탕, 육즙 가득 샤오롱바오, 바삭한 요우티아오 명가들입니다.
+            </p>
+            <div id="list-day3-breakfast" class="space-y-4"></div>
+        </section>
+
+    </main>
+
+    <!-- 팝업 모달 1: 식당 상세 (대표 메뉴 3개 + 실물 사진 + 한국어 발음 + 대중점평 찐리뷰) -->
+    <div id="dishModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl max-h-[88vh] flex flex-col overflow-hidden shadow-2xl animate-in slide-in-from-bottom duration-200">
+            
+            <!-- 모달 상단 헤더 -->
+            <div class="p-4 border-b border-slate-200 flex justify-between items-start bg-slate-50">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <span id="popCategory" class="bg-slate-900 text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full"></span>
+                        <span id="popPrice" class="text-xs font-bold text-slate-600"></span>
+                    </div>
+                    <h3 id="popRestName" class="text-lg font-black text-slate-900"></h3>
+                    <p id="popChineseName" class="text-xs font-bold text-amber-700"></p>
+                </div>
+                <button onclick="closeDishModal()" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold transition">
+                    ✕
+                </button>
+            </div>
+
+            <!-- 모달 스크롤 본문 -->
+            <div class="p-4 overflow-y-auto space-y-4 flex-1 text-xs">
+                
+                <!-- 대중점평 실제 평점 및 운영정보 카드 -->
+                <div class="bg-orange-50/70 border border-orange-200/80 rounded-2xl p-3.5 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-orange-700 font-black text-xs">大众点评 대중점평</span>
+                            <span class="bg-orange-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded">공식인증</span>
+                        </div>
+                        <span id="popRating" class="text-orange-700 font-extrabold text-sm"></span>
+                    </div>
+                    <div class="text-[11px] text-slate-600 space-y-1 border-t border-orange-100 pt-2">
+                        <p><strong>⏰ 영업시간:</strong> <span id="popHours"></span></p>
+                        <p><strong>💡 현지 팁:</strong> <span id="popTip"></span></p>
+                        <p><strong>📍 상세주소:</strong> <span id="popAddress"></span></p>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-1">
+                        <span class="text-amber-600 font-black text-sm">⭐</span>
+                        <h4 class="font-extrabold text-slate-900 text-sm">대표 3대 시그니처 요리 (실물 사진 & 발음)</h4>
+                    </div>
+                    <span class="text-[10px] text-slate-400">직접 크롤링 실물 사진</span>
+                </div>
+
+                <!-- 3개 메뉴 사진 및 정보 카드 컨테이너 -->
+                <div id="popDishesContainer" class="space-y-3">
+                    <!-- JS로 동적 렌더링 -->
+                </div>
+
+            </div>
+
+            <!-- 모달 하단 버튼바 -->
+            <div class="p-3 bg-slate-50 border-t border-slate-200 grid grid-cols-2 gap-2">
+                <a id="popBaiduBtn" href="#" target="_blank" rel="noopener noreferrer"
+                   class="flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-extrabold text-xs shadow-xs transition">
+                    📍 바이두 지도로 보기
+                </a>
+                <button id="popTaxiBtn"
+                   class="flex items-center justify-center gap-1 bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl font-extrabold text-xs shadow-xs transition">
+                    🚕 기사님 보여드리기
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 팝업 모달 2: 원터치 큰글씨 중국어 발음 & 주문 화면 -->
+    <div id="pronunOrderModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-5 space-y-4 shadow-2xl text-center">
+            
+            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                <span class="text-xs font-black text-rose-600 bg-rose-50 px-2.5 py-0.5 rounded-full">
+                    🗣️ 직원에게 직접 말하거나 보여주세요
+                </span>
+                <button onclick="closePronunOrderModal()" class="w-7 h-7 flex items-center justify-center rounded-full bg-slate-100 text-slate-600 font-bold text-sm">
+                    ✕
+                </button>
+            </div>
+
+            <div class="space-y-3 py-2">
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">중국어 주문 문장</span>
+                    <h3 id="modalOrderChinese" class="text-2xl font-black text-slate-900 leading-snug"></h3>
+                    <p id="modalOrderKoreanMean" class="text-xs font-bold text-slate-500"></p>
+                </div>
+
+                <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 space-y-1">
+                    <span class="text-[10px] font-black text-amber-800 uppercase tracking-wider">🗣️ 한국어로 이렇게 읽으세요!</span>
+                    <p id="modalOrderPronun" class="text-xl font-black text-rose-600 leading-snug"></p>
+                </div>
+            </div>
+
+            <!-- 음성 듣기 & 복사 버튼 -->
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="speakCurrentOrderModal()" class="flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-extrabold text-xs shadow-xs transition">
+                    <span>🔊</span> 음성 듣기
+                </button>
+                <button onclick="copyCurrentOrderText()" class="flex items-center justify-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl font-extrabold text-xs shadow-xs transition">
+                    <span>📋</span> 문장 복사
+                </button>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- 팝업 모달 3: 택시 기사님 전용 큰 글씨 모달 -->
+    <div id="taxiModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-5 space-y-4 shadow-2xl text-center">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                <span class="text-xs font-black text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-full">🚕 기사님께 바로 보여주세요</span>
+                <button onclick="closeTaxiModal()" class="w-7 h-7 flex items-center justify-center rounded-full bg-slate-100 text-slate-600 font-bold text-sm">✕</button>
+            </div>
+            
+            <div class="space-y-2 py-2">
+                <h4 id="modalTaxiTitle" class="text-sm font-black text-slate-900"></h4>
+                
+                <div class="bg-slate-100 p-4 rounded-2xl border border-slate-200 space-y-2 text-left">
+                    <p class="text-xs font-bold text-slate-500">기사님께 읽어드릴 한국어 발음:</p>
+                    <p class="text-sm font-black text-rose-600">"스푸, 칭 다이 워 취 저리!"</p>
+                    <p class="text-[10px] text-slate-400">(기사님, 여기로 가주세요!)</p>
+                    <hr class="border-slate-200">
+                    <p class="text-xs font-bold text-slate-500">목적지 중국어 주소:</p>
+                    <p id="modalTaxiContent" class="text-base font-black text-slate-900 leading-snug"></p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="speakCurrentTaxi()" class="flex items-center justify-center gap-1 bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-extrabold text-xs shadow-xs transition">
+                    <span>🔊</span> 기사님께 재생
+                </button>
+                <button onclick="copyTaxiAddress()" class="flex items-center justify-center gap-1 bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl font-extrabold text-xs shadow-xs transition">
+                    <span>📋</span> 주소 복사
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 💖 [SPECIAL] 첫 진입 감동 팝업: 유수진 사랑해 모달 -->
+    <div id="loveModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-gradient-to-b from-rose-500 via-pink-500 to-rose-600 w-full max-w-sm rounded-3xl p-6 text-white text-center shadow-2xl space-y-4 border-2 border-rose-200 animate-in zoom-in-95 duration-300">
+            <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto text-4xl shadow-inner animate-bounce">
+                💖
+            </div>
+            <div class="space-y-1.5">
+                <span class="text-[11px] font-black tracking-widest text-rose-100 uppercase bg-black/20 px-3 py-1 rounded-full border border-white/20">
+                    FOR MY DEAR SUJIN
+                </span>
+                <h2 class="text-2xl font-black text-white drop-shadow-md pt-1">
+                    유수진 사랑해 ❤️
+                </h2>
+                <p class="text-xs text-rose-100 font-bold">오빠가 수진이만을 위해 준비한 옌타이 여행 가이드</p>
+            </div>
+            <div class="bg-white/15 rounded-2xl p-4 border border-white/25 text-xs text-rose-50 leading-relaxed font-medium text-left space-y-2">
+                <p>✨ <strong>수진아!</strong> 우리 2박 3일 옌타이 여행 동안 맛있는 거 배 터지게 먹고, 예쁜 사진 1,000장 찍고, 둘만의 행복한 추억 많이 만들자!</p>
+                <p>🇨🇳 중국어 메뉴판, 현지 맛집 40곳, 인생샷 스팟, 기사님 택시 카드까지 오빠가 완벽하게 준비해 뒀으니 <strong>오빠만 믿고 따라와!</strong> 🥰</p>
+            </div>
+            <button onclick="closeLoveModal()" class="w-full bg-white text-rose-600 hover:bg-rose-50 active:scale-95 text-sm font-black py-3.5 rounded-2xl shadow-xl transition flex items-center justify-center gap-2">
+                <span>✈️</span> 오빠 믿고 여행 시작하기!
+            </button>
+        </div>
+    </div>
+
+    <!-- 토스트 알림 -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900/90 text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-lg pointer-events-none opacity-0 transition-opacity duration-300 z-50">
+        복사되었습니다!
+    </div>
+
+    <!-- 데이터 및 인터랙션 스크립트 -->
+    <script>
+        const restaurantsData = {"day1_dinner": [{"id": "d1_1", "name": "蓬莱春 (펑라이춘 芝罘店)", "chinese_name": "蓬莱春 (芝罘店)", "category": "정통 100년 노포 루차이", "address": "烟台市芝罘区毓璜顶西路13号", "location_tip": "완다플라자 남쪽 도보 8분, 유황정 공원 앞", "taxi_text": "师傅，请带我去：芝罘区毓璜顶西路13号 蓬莱春", "price": "인당 약 ¥85~115 (약 16,000~22,000원)", "rating": "4.8", "tag": "100년 노포 루차이 1등", "main_img": "https://img0.baidu.com/it/u=2863305943,593006519&fm=253&fmt=auto&app=138&f=JPEG?w=772&h=500", "desc": "국가 공인 중화노자호(中华老字号)이자 연태 루차이의 산증인. 대파기름으로 졸여낸 부드러운 해삼과 달콤짭조름한 구전대창이 전설적입니다.", "dishes": [{"name": "葱烧海参", "korean": "대파 해삼볶음 (원조 루차이)", "desc": "질 좋은 해삼에 노릇하게 태운 대파기름 소스를 듬뿍 졸여낸 산동 최고 명품 요리", "price": "약 ¥128", "img": "https://img0.baidu.com/it/u=691855688,2522580194&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=667", "pronun": "총샤오 하이선"}, {"name": "九转大肠", "korean": "산동 구전대창 (9겹 막창볶음)", "desc": "막창을 아홉 번 겹쳐 부드럽게 삶아낸 뒤 새콤달콤 매콤하게 볶아낸 최고급 요리", "price": "약 ¥68", "img": "https://img1.baidu.com/it/u=3632754595,1211951961&fm=253&fmt=auto&app=138&f=JPEG?w=514&h=500", "pronun": "지우주안 다창"}, {"name": "软炸海蛎子", "korean": "연태 굴 찹쌀튀김", "desc": "신선한 통영굴 스타일 생굴을 얇은 튀김옷으로 바삭촉촉하게 튀겨 소금후추에 찍어먹는 술안주", "price": "약 ¥48", "img": "https://img2.baidu.com/it/u=1840694911,734015802&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=639", "pronun": "롼자 하이리즈"}], "dianping": "蓬莱春(芝罘店)", "baidu_map": "烟台市芝罘区毓璜顶西路13号 蓬莱春", "hours": "11:00 ~ 14:00, 17:00 ~ 21:00 (브레이크타임 14:00~17:00)", "dianping_rating": "4.8점 (리뷰 4,200+개)", "tip": "주말 저녁은 17:30 전에 도착해야 웨이팅 없이 입장 가능. 국유기업 노포라 서비스는 투박하지만 맛은 압도적입니다.", "reviews": [{"user": "烟台老吃货 (연태 현지인)", "text": "대파 해삼볶음(葱烧海参)은 파기름 소스가 일품이라 남은 양념에 밥 비벼 먹으면 밥도둑 그 자체입니다. 부모님 모시고 오기 가장 좋은 정통 루차이 명가입니다."}, {"user": "旅行的猫 (여행객 리뷰)", "text": "구전대창(九转大肠)이 겉은 바삭하고 속은 부드러운데 잡내가 하나도 안 나요. 굴튀김도 바로 튀겨 나와 맥주 안주로 최고였습니다."}]}, {"id": "d1_2", "name": "百纳·观澜 (바이나 관란 朝阳街店)", "chinese_name": "百纳·观澜 (朝阳街店)", "category": "최고급 해장라오판 & 오션뷰 루차이", "address": "烟台市芝罘区朝阳街北首", "location_tip": "조양가 북쪽 바다 바로 앞 랜드마크 건물", "taxi_text": "师傅，请带我去：芝罘区朝阳街北首 百纳·观澜", "price": "인당 약 ¥120~170 (약 23,000~32,000원)", "rating": "4.9", "tag": "해장라오판(개불덮밥) 성지", "main_img": "https://img2.baidu.com/it/u=2567796222,3175010697&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "desc": "조양가 끝자락 바다 전망 테라스를 갖춘 연태 대표 파인다이닝. 연태 미식 1번으로 불리는 '해장라오판(개불부추덮밥)'의 퀄리티가 도시 전체에서 압도적 1등입니다.", "dishes": [{"name": "百纳海肠捞饭", "korean": "특제 개불부추 볶음덮밥 (필수 ⭐)", "desc": "신선한 활개불과 향긋한 부추를 특제 굴소스에 센 불로 볶아 밥에 비벼 먹는 연태 최고의 맛", "price": "약 ¥88", "img": "https://img2.baidu.com/it/u=2600616118,3697673667&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=642", "pronun": "바이나 하이창 라오판"}, {"name": "葱油天鹅蛋", "korean": "파기름 큰개량조개 찜", "desc": "주먹만한 쫄깃한 큰개량조개살에 대파기름과 달콤간장을 부어 감칠맛을 극대화한 요리", "price": "약 ¥58", "img": "https://img1.baidu.com/it/u=3161319919,3417956091&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=667", "pronun": "총유 톈어단"}, {"name": "老烟台焖子", "korean": "전통 옌타이 먼즈", "desc": "고구마전분 묵을 철판에 지져 진한 참깨 마장 소스와 다진 마늘즙을 듬뿍 얹어 먹는 소울푸드", "price": "약 ¥28", "img": "https://img1.baidu.com/it/u=917234201,1396137358&fm=253&fmt=auto&app=138&f=JPEG?w=514&h=500", "pronun": "라오 옌타이 먼즈"}], "dianping": "百纳观澜(朝阳街店)", "baidu_map": "烟台市芝罘区朝阳街北首 百纳观澜", "hours": "11:00 ~ 21:30 (브레이크타임 없음)", "dianping_rating": "4.9점 (조양가 必吃榜 1위)", "tip": "조양가 북쪽 끝 바다 전망 좌석(2층 창가)을 원하시면 17:00 오픈 직후 방문 추천. 해장라오판은 2~3인용으로 양이 푸짐합니다.", "reviews": [{"user": "美食探戈 (미식 탐방가)", "text": "연태에서 해장라오판(개불부추덮밥)을 가장 고급스럽고 깔끔하게 내놓는 곳. 개불이 입안에서 오독오독 씹히고 불맛이 밥알 하나하나에 배어있습니다."}, {"user": "Sunny_Z (데이트 방문객)", "text": "조양가 야경과 바다가 한눈에 내려다보여서 데이트 코스로 완벽해요. 파기름 조개찜과 옌타이 먼즈도 정갈하고 맛있습니다."}]}, {"id": "d1_3", "name": "一块豆腐·鲁菜·海鲜 (남대가점)", "chinese_name": "一块豆腐 (南大街店)", "category": "수제 손두부 & 산동 해산물 가성비 맛집", "address": "烟台市芝罘区南大街166号", "location_tip": "완다플라자 대각선 맞은편 도보 5분", "taxi_text": "师傅，请带我去：芝罘区南大街166号 一块豆腐", "price": "인당 약 ¥60~85 (약 11,000~16,000원)", "rating": "4.7", "tag": "현지인 웨이팅 1등 가성비", "main_img": "https://img1.baidu.com/it/u=3706910063,1893089637&fm=253&fmt=auto&app=138&f=PNG?w=522&h=500", "desc": "가마솥에서 당일 쑨 유기농 수제 콩두부와 깔끔한 해산물 요리. 대중점평 즈푸구 연속 1위 맛집으로, 자극적이지 않고 건강하면서도 감칠맛이 폭발합니다.", "dishes": [{"name": "招牌一块豆腐", "korean": "명품 수제 손두부 + 3종 양념장", "desc": "진하고 고소한 가마솥 손두부에 부추간장, 매콤양념장, 고소한 마장소스를 곁들여 먹는 필수 메뉴", "price": "약 ¥32", "img": "https://img0.baidu.com/it/u=1372861867,4052906938&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=649", "pronun": "자오파이 이콰이 더우푸"}, {"name": "石锅海肠捞饭", "korean": "돌솥 개불덮밥", "desc": "뜨거운 돌솥에 볶아 바삭한 누룽지 식감과 부드러운 개불의 조화가 매력적인 덮밥", "price": "약 ¥58", "img": "https://img2.baidu.com/it/u=3948401374,1600516273&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=575", "pronun": "스궈 하이창 라오판"}, {"name": "胶东大拌菜", "korean": "교동식 새콤달콤 샐러드", "desc": "아삭한 오이, 당근, 배추와 쫄깃한 해파리를 새콤달콤한 식초 양념에 무쳐 입맛을 돋우는 요리", "price": "약 ¥26", "img": "https://img1.baidu.com/it/u=3506475663,729458215&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=702", "pronun": "지아오둥 다반차이"}], "dianping": "一块豆腐(南大街店)", "baidu_map": "烟台市芝罘区南大街166号 一块豆腐", "hours": "11:00 ~ 14:30, 17:00 ~ 21:30", "dianping_rating": "4.7점 (가성비 루차이 1위)", "tip": "남대가 중심 번화가에 위치해 접근성이 좋으며, 1인당 60~70위안 선으로 매우 저렴합니다. 수제 온두부는 무조건 주문하세요.", "reviews": [{"user": "芝罘小太阳 (즈푸구 주민)", "text": "가게에서 직접 가마솥에 쑨 온두부가 정말 고소합니다. 3가지 특제 양념장에 찍어 먹으면 속도 편안하고 건강해지는 기분이에요."}, {"user": "K-Traveler (한국인 여행자)", "text": "돌솥 해장라오판 바닥에 눌어붙은 누룽지가 대박입니다. 자극적이지 않아서 남녀노소 호불호 없이 다 잘 먹었어요."}]}, {"id": "d1_4", "name": "李氏疙瘩汤 (리씨 거다탕 烟台山总店)", "chinese_name": "李氏疙瘩汤 (烟台山店)", "category": "30년 전통 해물 수제비탕 & 바지락볶음", "address": "烟台市芝罘区海岸路与朝阳街交叉口", "location_tip": "연태산 공원 정문 입구 도보 1분", "taxi_text": "师傅，请带我去：芝罘区海岸路 李氏疙瘩汤烟台山店", "price": "인당 약 ¥50~75 (약 9,500~14,000원)", "rating": "4.7", "tag": "국민 해장 1등 거다탕", "main_img": "https://img1.baidu.com/it/u=399405855,1087681175&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "desc": "연태를 찾은 모든 여행객이 꼭 들르는 원조 수제비탕 노포. 신선한 바지락, 게살, 새우를 우려낸 진하고 시원한 국물이 여행의 피로를 씻어줍니다.", "dishes": [{"name": "极品海鲜疙瘩汤", "korean": "특선 해물 수제비탕 (시그니처)", "desc": "바지락, 꽃게, 새우 살이 듬뿍 들어간 뽀얗고 시원한 국물에 쫄깃한 수제비가 가득한 대표 요리", "price": "약 ¥42", "img": "https://img2.baidu.com/it/u=3398091844,311071902&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=651", "pronun": "지핀 하이시안 거다탕"}, {"name": "辣炒花蛤", "korean": "불맛 매운 바지락볶음", "desc": "살아있는 활바지락을 청양고추와 파기름에 센 불로 볶아 맥주와 찰떡궁합인 안주", "price": "약 ¥28", "img": "https://img0.baidu.com/it/u=3891408521,2990343137&fm=253&fmt=auto&app=138&f=JPEG?w=761&h=500", "pronun": "라차오 화가"}, {"name": "老烟台鲅鱼水饺", "korean": "수제 삼치 물만두", "desc": "매일 손수 빚어 맑고 담백한 삼치 어육이 꽉 찬 연태식 만두", "price": "약 ¥38", "img": "https://img0.baidu.com/it/u=2253146395,622911362&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=1097", "pronun": "라오 옌타이 바위 수이자오"}], "dianping": "李氏疙瘩汤(烟台山店)", "baidu_map": "烟台市芝罘区海岸路 李氏疙瘩汤", "hours": "10:30 ~ 22:00", "dianping_rating": "4.7점 (30년 전통 노포)", "tip": "연태산 공원 바로 앞이라 산책 전후 들르기 좋습니다. 수제비탕은 양이 많으니 2인이면 소(小)자 시켜도 충분합니다.", "reviews": [{"user": "海边钓鱼翁 (현지 단골)", "text": "30년째 먹고 있는 거다탕. 조개와 게를 듬뿍 넣어 끓여서 국물이 시원하고 깊습니다. 전날 술 마시고 해장하기에 이만한 게 없어요."}, {"user": "Lin_Yantai (현지 직장인)", "text": "매운 바지락볶음(辣炒花蛤)에 연태 맥주 한잔 곁들이면 천국입니다. 조갯살이 해감이 잘되어 모래가 안 씹혀요."}]}, {"id": "d1_5", "name": "三合园水饺 (산허위안 수이자오 二马路店)", "chinese_name": "三合园水饺 (二马路店)", "category": "수제 삼치물만두 & 먹물교자 전문점", "address": "烟台市芝罘区二马路155号", "location_tip": "조양가 인근 이마루 번화가", "taxi_text": "师傅，请带我去：芝罘区二马路155号 三合园水饺", "price": "인당 약 ¥45~70 (약 8,500~13,000원)", "rating": "4.8", "tag": "삼치물만두 최고봉 성지", "main_img": "https://img2.baidu.com/it/u=3167273904,1832658374&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=1111", "desc": "연태 현지인들이 '만두는 무조건 삼합원'이라고 부르는 성지. 갓 잡은 삼치살을 곱게 다져 비린내 없이 우유처럼 촉촉한 육즙이 터져 나옵니다.", "dishes": [{"name": "手剁鲅鱼水饺", "korean": "특대형 수제 삼치물만두", "desc": "성인 손바닥만한 크기에 담백하고 부드러운 삼치살 소가 꽉 차 입안 가득 육즙이 흐르는 만두", "price": "약 ¥36", "img": "https://img0.baidu.com/it/u=2253146395,622911362&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=1097", "pronun": "쇼우둬 바위 수이자오"}, {"name": "黑金墨鱼水饺", "korean": "오징어먹물 해물교자", "desc": "검은 먹물 피 안에 쫄깃쫄깃한 갑오징어 살과 부추가 어우러져 씹는 맛이 최고인 만두", "price": "약 ¥42", "img": "https://img0.baidu.com/it/u=2617785871,4071072112&fm=253&fmt=auto&app=138&f=PNG?w=500&h=653", "pronun": "헤이진 모위 수이자오"}, {"name": "蒜蓉粉丝蒸扇贝", "korean": "알 가리비 마늘당면찜", "desc": "통통한 활가리비 위에 알싸한 볶은 마늘과 쫄깃한 당면을 올려 쪄낸 찜 요리", "price": "약 ¥38", "img": "https://img2.baidu.com/it/u=2227193513,3488699807&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1044", "pronun": "쏸룽 펀쓰 정 샨베이"}], "dianping": "三合园水饺(二马路店)", "baidu_map": "烟台市芝罘区二马路155号 三合园水饺", "hours": "10:30 ~ 21:30", "dianping_rating": "4.8점 (교동 수이자오 1위)", "tip": "만두는 주문 즉시 빚어 쪄내기 때문에 15분 정도 소요됩니다. 삼치만두는 1근(500g) 단위 또는 반근으로 주문 가능합니다.", "reviews": [{"user": "水饺控 (만두 매니아)", "text": "삼치 물만두 크기가 성인 주먹만 합니다! 생선 비린내가 전혀 안 나고 마치 크림처럼 부드러운 육즙이 터져 나옵니다."}, {"user": "Qingdao_Fan (청도 방문객)", "text": "검은색 오징어먹물 만두도 쫄깃하고 맛있어요. 마늘당면 가리비찜이랑 같이 시켜 먹으면 환상의 궁합입니다."}]}, {"id": "d1_6", "name": "旺角小渔村 (왕쟈오 샤오위춘 二马路店)", "chinese_name": "旺角小渔村 (二马路店)", "category": "활해산물 직판 수족관 식당", "address": "烟台市芝罘区二马路28号", "location_tip": "조양가에서 도보 10분 거리", "taxi_text": "师傅，请带我去：芝罘区二马路28号 旺角小渔村", "price": "인당 약 ¥70~95 (약 13,000~18,000원)", "rating": "4.6", "tag": "수족관 직판 가성비 1등", "main_img": "https://img1.baidu.com/it/u=2459902689,1066562671&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=653", "desc": "입구 수족관에서 활꽃게, 갯가재, 맛조개를 직접 골라 무게를 재고 조리법을 지정하는 찐로컬 식당. 거품 없는 가격과 압도적 신선함이 무기입니다.", "dishes": [{"name": "椒盐皮皮虾", "korean": "바삭 짭조름 쏙/갯가재 튀김", "desc": "살아있는 갯가재를 껍질째 바삭하게 튀겨 특제 후추소금에 볶아낸 고소함의 끝판왕", "price": "시가 (약 ¥68)", "img": "https://img2.baidu.com/it/u=3578084596,1683837940&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1048", "pronun": "지아오옌 피피샤"}, {"name": "清蒸大飞蟹", "korean": "산동 자연산 활꽃게찜", "desc": "알과 살이 꽉 찬 산동 앞바다 제철 꽃게를 증기로 쪄내 달달한 게살 본연의 맛", "price": "시가 (약 ¥88)", "img": "https://img1.baidu.com/it/u=1872879981,4129166334&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=653", "pronun": "칭정 다페이시에"}, {"name": "辣炒花蛤蛏子", "korean": "매운 모듬조개 볶음", "desc": "매콤달콤한 고추기름 양념에 센 불로 볶아낸 조개 안주", "price": "약 ¥32", "img": "https://img0.baidu.com/it/u=4258078497,1812377850&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=653", "pronun": "라차오 화가 청쯔"}], "dianping": "旺角小渔村(二马路店)", "baidu_map": "烟台市芝罘区二马路28号 旺角小渔村", "hours": "11:00 ~ 14:00, 16:30 ~ 22:00", "dianping_rating": "4.6점 (수족관 직판)", "tip": "입구 수족관에서 원하는 해산물을 고르면 직원이 그 자리에서 무게를 달아줍니다. 갯가재 튀김(椒盐皮皮虾)은 필수 주문!", "reviews": [{"user": "大连海味 (해산물 러버)", "text": "피피샤(갯가재) 튀김이 껍질까지 바삭해서 통째로 씹어먹기 좋습니다. 짭조름한 후추 양념이 고량주를 부르는 맛이에요."}, {"user": "Yantai_Foodie", "text": "꽃게가 살이 꽉 차 있고 달달합니다. 가격도 바가지 없이 전자저울로 정직하게 측정해서 안심하고 먹었어요."}]}, {"id": "d1_7", "name": "友利砂锅居 (유리 사과거 芝罘店)", "chinese_name": "友利砂锅居 (芝罘店)", "category": "연태 1등 향토 간식 옌타이 먼즈", "address": "烟台市芝罘区北马路 (완다플라자/기차역 상권)", "location_tip": "완다플라자 북쪽 인근", "taxi_text": "师傅，请带我去：芝罘区北马路 友利砂锅居", "price": "인당 약 ¥35~55 (약 6,500~10,000원)", "rating": "4.7", "tag": "옌타이 먼즈 원조 맛집", "main_img": "https://img1.baidu.com/it/u=2314978162,2333213768&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=659", "desc": "연태 사람들의 유년시절 추억이 깃든 옌타이 먼즈(지진 전분묵)와 뜨끈한 뚝배기 요리. 겉은 바삭하고 속은 쫄깃한 묵과 고소한 참깨소스의 조화가 예술입니다.", "dishes": [{"name": "老烟台煎焖子", "korean": "참깨마장 철판 묵구이 (필수)", "desc": "철판에 바삭하게 구운 투명 묵에 진한 참깨 마장 소스와 알싸한 마늘즙을 부어 비벼 먹는 간식", "price": "약 ¥18", "img": "https://img1.baidu.com/it/u=2547997913,3242592652&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "pronun": "老烟台煎焖子"}, {"name": "酸菜白肉砂锅", "korean": "묵은지 삼겹살 탕", "desc": "시원새콤한 백김치와 얇게 썬 삼겹살, 쫄깃한 당면이 들어간 속풀이 뚝배기", "price": "약 ¥28", "img": "https://img1.baidu.com/it/u=2547997913,3242592652&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "pronun": "쏸차이 바이로우 샤궈"}, {"name": "干炸里脊", "korean": "바삭 등심 탕수 튀김", "desc": "돼지 등심을 얇게 저며 바삭하게 튀겨내 소금후추에 찍어 먹는 튀김", "price": "약 ¥32", "img": "https://img1.baidu.com/it/u=2547997913,3242592652&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "pronun": "간자 리지"}], "dianping": "友利砂锅居", "baidu_map": "烟台市芝罘区北马路 友利砂锅居", "hours": "10:00 ~ 21:00", "dianping_rating": "4.7점 (소울푸드 노포)", "tip": "연태 대표 향토 간식 옌타이 먼즈를 가장 정석으로 맛볼 수 있는 곳입니다. 가벼운 저녁이나 야식으로 딱 좋습니다.", "reviews": [{"user": "老烟台记忆 (연태 토박이)", "text": "어릴 때 먹던 그 맛 그대로입니다. 겉은 바삭하고 속은 쫄깃한 전분 묵에 참깨 마장 소스와 다진 마늘의 조화가 중독적이에요."}, {"user": "소주러버", "text": "백김치 삼겹살 뚝배기 국물이 시원새콤해서 느끼함이 싹 내려갑니다. 등심 튀김도 겉바속촉 맛있어요."}]}, {"id": "d1_8", "name": "荣祥海鲜 (롱샹 해선 环山路店)", "chinese_name": "荣祥海鲜 (环山路店)", "category": "현지 미식가 단골 활어 생선조림", "address": "烟台市芝罘区环山路98号", "location_tip": "남산공원 북측 도로변", "taxi_text": "师傅，请带我去：芝罘区环山路98号 荣祥海鲜", "price": "인당 약 ¥85~120 (약 16,000~23,000원)", "rating": "4.8", "tag": "현지인 단골 생선요리 명가", "main_img": "https://img1.baidu.com/it/u=3285635114,434477702&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=633", "desc": "관광지 거품 없이 연태 공무원과 현지 주민들이 회식과 가족모임으로 찾는 찐 실속파 해산물 레스토랑. 조기조림과 참소라 무침의 깊은 맛이 뛰어납니다.", "dishes": [{"name": "红烧野生黄花鱼", "korean": "산동 전통 간장 조기조림", "desc": "도톰한 조기 살에 산동 전통 간장 양념이 깊게 배어 밥 두 공기를 비우게 만드는 대표 밥도둑", "price": "약 ¥68", "img": "https://img0.baidu.com/it/u=80263989,453200921&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=749", "pronun": "훙샤오 예셩 황화위"}, {"name": "温拌海螺", "korean": "파기름 겨자 참소라 냉채", "desc": "신선한 참소라 살을 살짝 데쳐 아삭한 오이와 파기름 겨자 소스에 무쳐낸 고급 안주", "price": "약 ¥58", "img": "https://img2.baidu.com/it/u=617825829,2120830295&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=750", "pronun": "원반 하이루오"}, {"name": "鲜贝杂菇煲", "korean": "가리비 관자 버섯탕", "desc": "신선한 가리비 관자와 모듬 버섯을 맑게 끓여낸 담백한 국물", "price": "약 ¥42", "img": "https://img1.baidu.com/it/u=3705349893,78406791&fm=253&fmt=auto&app=138&f=JPEG?w=637&h=500", "pronun": "시안베이 자구 바오"}], "dianping": "荣祥海鲜(环山路店)", "baidu_map": "烟台市芝罘区环山路98号 荣祥海鲜", "hours": "11:00 ~ 14:00, 17:00 ~ 21:30", "dianping_rating": "4.8점 (현지 공무원 회식 명소)", "tip": "자연산 조기조림(黄花鱼)은 양념이 진해 밥을 꼭 시켜서 비벼 드세요.", "reviews": [{"user": "鲁菜研究 (루차이 연구원)", "text": "생선 조림의 양념 밸런스가 기가 막힙니다. 짜지도 달지도 않고 생선 살에 쏙 배어있어 감탄이 절로 나옵니다."}, {"user": "Chen_Travel", "text": "참소라 무침이 쫄깃하고 파기름 향이 그윽합니다. 관광객보다 현지인들이 테이블 가득 채우는 진짜 맛집."}]}, {"id": "d1_9", "name": "聚东·虹口观海餐厅 (홍구 해안점)", "chinese_name": "聚东·虹口观海餐厅", "category": "바다 전망 必吃榜 정통 해산물 명가", "address": "烟台市芝罘区大马路111号 (홍구호텔 옆)", "location_tip": "해안도로 바다 정면 조망 테라스", "taxi_text": "师傅，请带我去：芝罘区大马路111号 聚东虹口观海餐厅", "price": "인당 약 ¥110~150 (약 21,000~29,000원)", "rating": "4.9", "tag": "대중점평 必吃榜 바다전망 명소", "main_img": "https://img2.baidu.com/it/u=2153943679,1422402538&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "desc": "창밖으로 푸른 바다가 펼쳐지는 대중점평 必吃榜 상봉 식당. 신선한 활어회, 꽃게찜, 파기름 해삼 요리가 정갈하고 고급스럽습니다.", "dishes": [{"name": "虹口葱油野生海参", "korean": "파기름 자연산 해삼찜", "desc": "부드러운 식감의 해삼에 대파기름 향을 입혀 풍미를 극대화한 요리", "price": "약 ¥138", "img": "https://img0.baidu.com/it/u=1829858725,2028918778&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "pronun": "훙커우 총유 예셩 하이선"}, {"name": "清蒸深海大飞蟹", "korean": "산동 활 꽃게찜", "desc": "달콤한 게살이 꽉 찬 당일 조업 자연산 꽃게찜", "price": "시가 (약 ¥88)", "img": "https://img1.baidu.com/it/u=1872879981,4129166334&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=653", "pronun": "칭정 션하이 다페이시에"}, {"name": "海肠捞饭", "korean": "관해 특제 개불덮밥", "desc": "바다를 바라보며 즐기는 감칠맛 넘치는 시그니처 덮밥", "price": "약 ¥78", "img": "https://img0.baidu.com/it/u=2551577023,561830143&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "pronun": "하이창 라오판"}], "dianping": "聚东虹口观海餐厅", "baidu_map": "烟台市芝罘区大马路111号 聚东虹口观海餐厅", "hours": "11:00 ~ 14:00, 17:00 ~ 21:30", "dianping_rating": "4.9점 (대중점평 必吃榜)", "tip": "바다 정면 창가 자리는 예약 필수. 해 질 무렵 일몰과 함께 해산물을 즐기면 인생샷과 로맨틱한 분위기를 잡을 수 있습니다.", "reviews": [{"user": "浪漫旅人 (낭만 여행자)", "text": "창밖으로 펼쳐지는 연태 바다 풍경이 예술입니다. 음식도 하나하나 호텔급으로 정갈하고 대파 해삼찜이 예술이네요."}, {"user": "SeaBreeze", "text": "꽃게찜이 너무 신선해서 단맛이 납니다. 조양가에서 차로 5분 거리라 저녁 먹고 산책하기 좋습니다."}]}, {"id": "d1_10", "name": "小红鲸·海鲜餐厅 (남대가점)", "chinese_name": "小红鲸·海鲜 (南大街店)", "category": "연태 대표 해산물 브랜드 & 必吃榜", "address": "烟台市芝罘区南大街82号", "location_tip": "완다플라자 도보 7분, 번화가 위치", "taxi_text": "师傅，请带我去：芝罘区南大街82号 小红鲸海鲜", "price": "인당 약 ¥80~110 (약 15,000~21,000원)", "rating": "4.8", "tag": "연태 랜드마크 해산물 브랜드", "main_img": "https://img1.baidu.com/it/u=51953617,851417113&fm=253&fmt=auto&app=138&f=JPEG?w=667&h=500", "desc": "연태에서 가장 인지도 높은 프랜차이즈 해산물 전문점 중 하나로, 철저한 위생 관리와 정찰제 가격표로 한국인 여행자들에게도 만족도가 매우 높습니다.", "dishes": [{"name": "蒜蓉粉丝天鹅蛋", "korean": "마늘당면 큰개량조개구이", "desc": "쫄깃한 큰개량조개에 마늘소스를 얹어 구워낸 식당 1위 메뉴", "price": "약 ¥18/개", "img": "https://img2.baidu.com/it/u=2630721098,2456856787&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=878", "pronun": "쏸룽 펀쓰 톈어단"}, {"name": "海肠捞饭", "korean": "소홍경 특제 개불덮밥", "desc": "초록 부추와 바다 개불이 어우러진 베스트셀러 식사", "price": "약 ¥68", "img": "https://img2.baidu.com/it/u=1556323657,430703163&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "pronun": "하이창 라오판"}, {"name": "清蒸海鲈鱼", "korean": "농어 파기름 찜", "desc": "신선한 활농어를 살짝 쪄내 부드러운 생선살의 진수를 맛보는 요리", "price": "약 ¥58", "img": "https://img0.baidu.com/it/u=876033620,532743751&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=639", "pronun": "칭정 하이루위"}], "dianping": "小红鲸海鲜(南大街店)", "baidu_map": "烟台市芝罘区南大街82号 小红鲸", "hours": "11:00 ~ 21:30", "dianping_rating": "4.8점 (대형 브랜드 必吃榜)", "tip": "체인 브랜드답게 청결도가 최고 수준이고 메뉴판에 사진과 가격이 완벽히 명시되어 있어 중국어 못해도 안심입니다.", "reviews": [{"user": "安全第一 (위생 중시 식객)", "text": "매장이 엄청 깨끗하고 오픈 키친이라 믿고 먹을 수 있습니다. 마늘당면 조개구이가 크고 알찹니다."}, {"user": "Seoulite_in_China", "text": "해장라오판 실패하고 싶지 않다면 무조건 여기 오세요. 실패 없는 대중적인 맛의 표본입니다."}]}], "day2_lunch": [{"id": "d2_1", "name": "海岛渔家乐 (양마도 원조 어가식당)", "chinese_name": "海岛渔家乐 (养马岛店)", "category": "양마도 섬 안 최고 평점 & 정찰제 어가식당", "address": "烟台市牟平区养马岛天马路中段", "location_tip": "스쿠터 타고 양마도 섬 중심 진입로", "taxi_text": "师傅，请带我去：养马岛天马路 海岛渔家乐", "price": "인당 약 ¥70~95 (약 13,000~18,000원)", "rating": "4.8", "tag": "양마도 1등 안심 정찰제", "main_img": "https://img2.baidu.com/it/u=2170796046,729534280&fm=253&fmt=auto&app=120&f=JPEG?w=1101&h=800", "desc": "양마도 섬 안에서 가장 신뢰받는 찐 원조 어가식당. 전자저울 공개 정찰제로 가마솥 해물찜과 부추개불볶음을 푸짐하게 즐길 수 있습니다.", "dishes": [{"name": "原汁大锅蒸海鲜", "korean": "가마솥 모듬 조개·새우찜", "desc": "가리비, 바지락, 굴, 새우를 김이 펄펄 나는 가마솥에 쪄내 바다의 신선한 단맛이 살아있는 한상", "price": "약 ¥88", "img": "https://img2.baidu.com/it/u=2170796046,729534280&fm=253&fmt=auto&app=120&f=JPEG?w=1101&h=800", "pronun": "위안즈 다궈 정 하이시안"}, {"name": "韭菜炒海肠", "korean": "양마도 청정 개불볶음", "desc": "오독오독한 청정 개불과 향긋한 부추를 센 불에 볶아낸 섬 마을 별미", "price": "약 ¥68", "img": "https://img2.baidu.com/it/u=32426190,1395087751&fm=253&fmt=auto&app=138&f=JPEG?w=566&h=500", "pronun": "지우차이 차오 하이창"}, {"name": "渔家海胆水饺", "korean": "수제 성게알 물만두", "desc": "황금빛 성게알이 듬뿍 들어가 녹진하고 고소한 바다 풍미가 입안에 퍼지는 만두", "price": "약 ¥48", "img": "https://img0.baidu.com/it/u=1642976906,3213836702&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1044", "pronun": "위자 하이단 수이자오"}], "dianping": "海岛渔家乐(养马岛)", "baidu_map": "烟台市牟平区养马岛天马路 海岛渔家乐", "hours": "10:30 ~ 15:00, 16:30 ~ 20:30", "dianping_rating": "4.8점 (대중점평 섬 내 상위)", "tip": "스쿠터 일주 중 점심에 들르기 좋습니다. 수족관에서 무게를 달 때 바구니 물기를 털어달라고 꼭 말씀하세요.", "reviews": [{"user": "养马岛骑行者 (스쿠터 여행자)", "text": "海岛渔家乐 (양마도 원조 어가식당)에서 먹은 가리비와 성게 요리가 신선했어요. 바다 보면서 시원한 맥주 한잔하기 최고!"}, {"user": "海边日记 (바다 여행자)", "text": "관광지 특유의 바가지 없이 정찰제로 운영해서 만족스러웠습니다. 해산물찜이 푸짐합니다."}]}, {"id": "d2_2", "name": "德盛缘海鲜烧烤 (양마도 해안도로점)", "chinese_name": "德盛缘海鲜烧烤 (养马岛店)", "category": "바다 앞 숯불 해산물구이 & 해장라오판", "address": "烟台市牟平区养马岛环岛路西段", "location_tip": "스쿠터 해안도로 바다 바로 앞", "taxi_text": "师傅，请带我去：养马岛环岛路 德盛缘海鲜烧烤", "price": "인당 약 ¥65~90 (약 12,000~17,000원)", "rating": "4.7", "tag": "오션뷰 숯불 가리비구이", "main_img": "https://img1.baidu.com/it/u=3317759532,1712946338&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "desc": "스쿠터를 타다 바닷바람을 쐬며 숯불에 지글지글 굽는 마늘 가리비와 굴구이, 꼬들한 개불덮밥을 먹을 수 있는 라이더들의 쉼터입니다.", "dishes": [{"name": "蒜蓉炭烤生蚝扇贝", "korean": "마늘버터 당면 가리비구이", "desc": "숯불 위에서 지글지글 익어가는 통통한 가리비와 다진 마늘의 환상 조합", "price": "약 ¥8/개", "img": "https://img2.baidu.com/it/u=2684101349,3588003135&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=653", "pronun": "쏸룽 탄카오 셩하오 샨베이"}, {"name": "德盛招牌海肠捞饭", "korean": "양마도식 불맛 개불덮밥", "desc": "불맛과 감칠맛이 입안 가득 감도는 든든한 점심 식사", "price": "약 ¥58", "img": "https://img0.baidu.com/it/u=613557750,619098154&fm=253&fmt=auto&app=138&f=JPEG?w=667&h=500", "pronun": "더셩 자오파이 하이창 라오판"}, {"name": "炭烤深海大鱿鱼", "korean": "통오징어 숯불 바베큐", "desc": "매콤달콤한 소스를 발라 숯불에 통째로 구워낸 쫄깃한 오징어구이", "price": "약 ¥25", "img": "https://img0.baidu.com/it/u=3549417345,2141900036&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=653", "pronun": "탄카오 션하이 다요우위"}], "dianping": "德盛缘海鲜烧烤(养马岛店)", "baidu_map": "烟台市牟平区养马岛环岛路 德盛缘海鲜烧烤", "hours": "10:30 ~ 15:00, 16:30 ~ 20:30", "dianping_rating": "4.7점 (대중점평 섬 내 상위)", "tip": "스쿠터 일주 중 점심에 들르기 좋습니다. 수족관에서 무게를 달 때 바구니 물기를 털어달라고 꼭 말씀하세요.", "reviews": [{"user": "养马岛骑行者 (스쿠터 여행자)", "text": "德盛缘海鲜烧烤 (양마도 해안도로점)에서 먹은 가리비와 성게 요리가 신선했어요. 바다 보면서 시원한 맥주 한잔하기 최고!"}, {"user": "海边日记 (바다 여행자)", "text": "관광지 특유의 바가지 없이 정찰제로 운영해서 만족스러웠습니다. 해산물찜이 푸짐합니다."}]}, {"id": "d2_3", "name": "海岛日记 Cafe & Bistro (후해 절벽점)", "chinese_name": "海岛日记 (养马岛后海店)", "category": "후해 절벽 오션뷰 감성 카페 & 디저트", "address": "烟台市牟平区养马岛后海悬崖栈道旁", "location_tip": "후해 해식 절벽 산책로 바로 옆", "taxi_text": "师傅，请带我去：养马岛后海 海岛日记", "price": "인당 약 ¥35~60 (약 6,500~11,000원)", "rating": "4.9", "tag": "에메랄드빛 오션뷰 카페 1등", "main_img": "https://img2.baidu.com/it/u=1874221953,2805977062&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=654", "desc": "양마도 최고의 비경인 후해(后海) 에메랄드 절벽을 품은 통창 카페. 스쿠터를 세우고 시원한 코코넛라떼와 갓 구운 와플을 즐기며 인생샷을 건지는 필수 코스입니다.", "dishes": [{"name": "海盐生椰拿铁", "korean": "시그니처 솔트 코코넛라떼", "desc": "부드러운 코코넛 밀크와 쌉싸름한 에스프레소, 짭조름한 바다소금 폼의 조화", "price": "약 ¥32", "img": "https://img2.baidu.com/it/u=3730833721,887369017&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=750", "pronun": "하이옌 셩예 나톄"}, {"name": "现烤比利时华夫饼", "korean": "아이스크림 벨기에 와플", "desc": "바삭하고 따끈한 와플 위에 바닐라 아이스크림과 메이플 시럽을 얹은 디저트", "price": "약 ¥38", "img": "https://img1.baidu.com/it/u=2139526071,850557420&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=653", "pronun": "시안카오 비리시 화푸빙"}, {"name": "巴斯克重芝士蛋糕", "korean": "스페인식 바스크 치즈케이크", "desc": "진한 크림치즈의 깊은 풍미를 그대로 구워낸 조각케이크", "price": "약 ¥35", "img": "https://img2.baidu.com/it/u=683199051,3428902550&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=635", "pronun": "바스커 중즈스 단가오"}], "dianping": "海岛日记(养马岛店)", "baidu_map": "烟台市牟平区养马岛 海岛日记", "hours": "10:30 ~ 15:00, 16:30 ~ 20:30", "dianping_rating": "4.9점 (대중점평 섬 내 상위)", "tip": "스쿠터 일주 중 점심에 들르기 좋습니다. 수족관에서 무게를 달 때 바구니 물기를 털어달라고 꼭 말씀하세요.", "reviews": [{"user": "养马岛骑行者 (스쿠터 여행자)", "text": "海岛日记 Cafe & Bistro (후해 절벽점)에서 먹은 가리비와 성게 요리가 신선했어요. 바다 보면서 시원한 맥주 한잔하기 최고!"}, {"user": "海边日记 (바다 여행자)", "text": "관광지 특유의 바가지 없이 정찰제로 운영해서 만족스러웠습니다. 해산물찜이 푸짐합니다."}]}, {"id": "d2_4", "name": "渔人码头海鲜海味馆 (대교 입구점)", "chinese_name": "渔人码头海鲜海味馆 (牟平店)", "category": "양마도 진입 전 대형 정찰제 안심 식당", "address": "烟台市牟平区滨海东路与通海路交叉口", "location_tip": "양마도 대교 건너기 직전 남단", "taxi_text": "师傅，请带我去：牟平区滨海东路 渔人码头海鲜海味馆", "price": "인당 약 ¥80~110 (약 15,000~21,000원)", "rating": "4.7", "tag": "바가지 제로 정찰제 대형식당", "main_img": "https://img2.baidu.com/it/u=2170796046,729534280&fm=253&fmt=auto&app=120&f=JPEG?w=1101&h=800", "desc": "섬 진입 전 위치하여 관광지 프리미엄이나 바가지가 전혀 없고, 깨끗하고 쾌적한 홀에서 활전복과 조개 요리를 맛볼 수 있는 곳입니다.", "dishes": [{"name": "葱油深海鲍鱼", "korean": "파기름 활전복 찜", "desc": "부드럽게 쪄낸 신선한 전복에 대파기름 소스를 얹어 쫄깃야들한 식감", "price": "약 ¥15/마리", "img": "https://img1.baidu.com/it/u=358500514,3739424830&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=653", "pronun": "총유 션하이 바오위"}, {"name": "香辣天鹅蛋", "korean": "매콤 칼칼 조개살 볶음", "desc": "두툼한 개량조개 살을 피망, 고추와 함께 매콤하게 볶아낸 별미", "price": "약 ¥48", "img": "https://img0.baidu.com/it/u=3265271575,721416095&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=750", "pronun": "샹라 톈어단"}, {"name": "手工鲅鱼丸子汤", "korean": "맑은 삼치 완자탕", "desc": "부드러운 생선살 완자가 둥둥 뜬 개운한 국물탕", "price": "약 ¥38", "img": "https://img2.baidu.com/it/u=1002856191,4046571310&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=968", "pronun": "쇼우궁 바위 완쯔탕"}], "dianping": "渔人码头海鲜馆(牟平)", "baidu_map": "烟台市牟平区通海路 渔人码头海鲜海味馆", "hours": "10:30 ~ 15:00, 16:30 ~ 20:30", "dianping_rating": "4.7점 (대중점평 섬 내 상위)", "tip": "스쿠터 일주 중 점심에 들르기 좋습니다. 수족관에서 무게를 달 때 바구니 물기를 털어달라고 꼭 말씀하세요.", "reviews": [{"user": "养马岛骑行者 (스쿠터 여행자)", "text": "渔人码头海鲜海味馆 (대교 입구점)에서 먹은 가리비와 성게 요리가 신선했어요. 바다 보면서 시원한 맥주 한잔하기 최고!"}, {"user": "海边日记 (바다 여행자)", "text": "관광지 특유의 바가지 없이 정찰제로 운영해서 만족스러웠습니다. 해산물찜이 푸짐합니다."}]}, {"id": "d2_5", "name": "海风阁渔家菜 (타자촌점)", "chinese_name": "海风阁渔家菜 (养马岛驼子村)", "category": "어부 가족이 운영하는 소박한 해물밥상", "address": "烟台市牟平区养马岛驼子村", "location_tip": "스쿠터 일주 코스 중간 마을", "taxi_text": "师傅，请带我去：养马岛驼子村 海风阁渔家菜", "price": "인당 약 ¥55~75 (약 10,000~14,000원)", "rating": "4.6", "tag": "어촌 가정식 성게알 계란찜", "main_img": "https://img2.baidu.com/it/u=2170796046,729534280&fm=253&fmt=auto&app=120&f=JPEG?w=1101&h=800", "desc": "토박이 어부 부부가 직접 잡은 해산물로 정직하게 차려내는 어촌 백반. 성게알 계란찜과 조개 손칼국수 맛이 어머니 손맛처럼 깊습니다.", "dishes": [{"name": "海胆鲜蒸蛋", "korean": "푸딩 성게알 계란찜", "desc": "신선한 성게알이 들어가 부드럽고 녹진한 바다향 가득 계란찜", "price": "약 ¥35", "img": "https://img1.baidu.com/it/u=1137809359,2719281871&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "pronun": "하이단 시안 정단"}, {"name": "海鲜手擀面", "korean": "바지락 해물 손칼국수", "desc": "조개 육수로 시원하게 끓여낸 쫄깃쫄깃 국수", "price": "약 ¥25", "img": "https://img0.baidu.com/it/u=1273332522,2939538548&fm=253&fmt=auto&app=138&f=JPEG?w=607&h=419", "pronun": "하이시안 쇼우간몐"}, {"name": "野生杂鱼小锅焖", "korean": "어가식 모듬 생선조림", "desc": "당일 어획한 작은 생선들을 짭조름하게 조린 밥도둑 반찬", "price": "약 ¥48", "img": "https://img2.baidu.com/it/u=1953676681,2472810433&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=653", "pronun": "예셩 자위 샤오궈 먼"}], "dianping": "海风阁渔家菜(养马岛)", "baidu_map": "烟台市牟平区养马岛驼子村 海风阁渔家菜", "hours": "10:30 ~ 15:00, 16:30 ~ 20:30", "dianping_rating": "4.6점 (대중점평 섬 내 상위)", "tip": "스쿠터 일주 중 점심에 들르기 좋습니다. 수족관에서 무게를 달 때 바구니 물기를 털어달라고 꼭 말씀하세요.", "reviews": [{"user": "养马岛骑行者 (스쿠터 여행자)", "text": "海风阁渔家菜 (타자촌점)에서 먹은 가리비와 성게 요리가 신선했어요. 바다 보면서 시원한 맥주 한잔하기 최고!"}, {"user": "海边日记 (바다 여행자)", "text": "관광지 특유의 바가지 없이 정찰제로 운영해서 만족스러웠습니다. 해산물찜이 푸짐합니다."}]}, {"id": "d2_6", "name": "胶东小海鲜 (동쪽 해안점)", "chinese_name": "胶东小海鲜 (养马岛环岛路)", "category": "스쿠터 라이더들의 굴전 & 조개구이", "address": "烟台市牟平区养马岛环岛路东首", "location_tip": "동쪽 등대 전망대 인근", "taxi_text": "师傅，请带我去：养马岛环岛路东首 胶东小海鲜", "price": "인당 약 ¥60~85 (약 11,000~16,000원)", "rating": "4.6", "tag": "라이더 쉼터 굴전 & 조개탕", "main_img": "https://img1.baidu.com/it/u=1999285552,334060082&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1054", "desc": "양마도 동쪽 해안을 달리다 편하게 들러 바삭한 굴전과 시원한 조개탕으로 라이딩 허기를 달래기 좋은 곳입니다.", "dishes": [{"name": "蛎头韭菜煎蛋", "korean": "고소한 통영식 굴전", "desc": "생굴과 부추를 달걀물에 부쳐낸 고소하고 바삭한 전", "price": "약 ¥32", "img": "https://img1.baidu.com/it/u=311041451,2774480975&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1044", "pronun": "리터우 지우차이 지안단"}, {"name": "原汁大蛤蜊汤", "korean": "바지락 맑은탕", "desc": "해장과 속풀이에 으뜸인 맑고 뽀얀 조개 국물", "price": "약 ¥28", "img": "https://img2.baidu.com/it/u=1035034709,1588790009&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1044", "pronun": "위안즈 다거리탕"}, {"name": "白灼海捕大虾", "korean": "삶은 자연산 대하", "desc": "신선한 새우 본연의 달콤하고 탱글한 살을 맛보는 요리", "price": "약 ¥48", "img": "https://img2.baidu.com/it/u=1766610553,2560112633&fm=253&fmt=auto&app=120&f=JPEG?w=823&h=800", "pronun": "바이주어 하이부 다샤"}], "dianping": "胶东小海鲜(养马岛)", "baidu_map": "烟台市牟平区养马岛环岛路 胶东小海鲜", "hours": "10:30 ~ 15:00, 16:30 ~ 20:30", "dianping_rating": "4.6점 (대중점평 섬 내 상위)", "tip": "스쿠터 일주 중 점심에 들르기 좋습니다. 수족관에서 무게를 달 때 바구니 물기를 털어달라고 꼭 말씀하세요.", "reviews": [{"user": "养马岛骑行者 (스쿠터 여행자)", "text": "胶东小海鲜 (동쪽 해안점)에서 먹은 가리비와 성게 요리가 신선했어요. 바다 보면서 시원한 맥주 한잔하기 최고!"}, {"user": "海边日记 (바다 여행자)", "text": "관광지 특유의 바가지 없이 정찰제로 운영해서 만족스러웠습니다. 해산물찜이 푸짐합니다."}]}, {"id": "d2_7", "name": "鑫阳饭庄 (양마도 씬양반장)", "chinese_name": "鑫阳饭庄 (养马岛店)", "category": "현지 주민들이 꼽는 양마도 1등 어가식당", "address": "烟台市牟平区养马岛天马路", "location_tip": "양마도 섬 중심 마을 회관 인근", "taxi_text": "师傅，请带我去：养马岛天马路 鑫阳饭庄", "price": "인당 약 ¥65~90 (약 12,000~17,000원)", "rating": "4.8", "tag": "현지 주민 단골 1위 어가", "main_img": "https://img2.baidu.com/it/u=2051427263,423527502&fm=253&fmt=auto&app=138&f=JPEG?w=686&h=500", "desc": "양마도 토박이 주민들이 손님 오면 데려가는 찐 로컬 맛집. 생선 찜과 조개 요리의 기본기가 탄탄하며 조미료 없이 담백합니다.", "dishes": [{"name": "清蒸黑头鱼", "korean": "우럭 파기름 찜", "desc": "당일 어선에서 직송된 싱싱한 활우럭을 증기로 쪄낸 생선요리", "price": "약 ¥58", "img": "https://img1.baidu.com/it/u=1255352307,2949559621&fm=253&fmt=auto&app=138&f=JPEG?w=667&h=500", "pronun": "칭정 헤이터우위"}, {"name": "海肠炒韭菜", "korean": "부추 개불볶음", "desc": "씹는 맛이 살아있는 오독오독한 양마도 개불 요리", "price": "약 ¥65", "img": "https://img2.baidu.com/it/u=32426190,1395087751&fm=253&fmt=auto&app=138&f=JPEG?w=566&h=500", "pronun": "하이창 차오 지우차이"}, {"name": "胶东扇贝手擀面", "korean": "가리비 칼국수", "desc": "통통한 가리비가 듬뿍 들어간 담백하고 구수한 손국수", "price": "약 ¥28", "img": "https://img1.baidu.com/it/u=535725623,2256524277&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=653", "pronun": "지아오둥 샨베이 쇼우간몐"}], "dianping": "鑫阳饭庄(养马岛)", "baidu_map": "烟台市牟平区养马岛 鑫阳饭庄", "hours": "10:30 ~ 15:00, 16:30 ~ 20:30", "dianping_rating": "4.8점 (대중점평 섬 내 상위)", "tip": "스쿠터 일주 중 점심에 들르기 좋습니다. 수족관에서 무게를 달 때 바구니 물기를 털어달라고 꼭 말씀하세요.", "reviews": [{"user": "养马岛骑行者 (스쿠터 여행자)", "text": "鑫阳饭庄 (양마도 씬양반장)에서 먹은 가리비와 성게 요리가 신선했어요. 바다 보면서 시원한 맥주 한잔하기 최고!"}, {"user": "海边日记 (바다 여행자)", "text": "관광지 특유의 바가지 없이 정찰제로 운영해서 만족스러웠습니다. 해산물찜이 푸짐합니다."}]}, {"id": "d2_8", "name": "亚新渔家小船海鲜 (양마도점)", "chinese_name": "亚新渔家小船海鲜", "category": "소형 어선 당일 직송 자연산 해산물", "address": "烟台市牟平区养马岛环岛路驼子", "location_tip": "스쿠터 해안도로변 바다 전망", "taxi_text": "师傅，请带我去：养马岛 亚新渔家小船海鲜", "price": "인당 약 ¥70~95 (약 13,000~18,000원)", "rating": "4.7", "tag": "당일 조업 어선 직판 어가", "main_img": "https://img2.baidu.com/it/u=1886383099,3007667807&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "desc": "가게 전용 소형 어선으로 당일 아침 잡아 올린 해산물만 취급하는 곳. 살이 꽉 찬 꽃게와 갯가재의 단맛이 남다릅니다.", "dishes": [{"name": "清蒸小船飞蟹", "korean": "소형어선 당일 꽃게찜", "desc": "어선에서 바로 내려 쪄낸 살이 꽉 찬 달콤한 꽃게", "price": "시가 (약 ¥78)", "img": "https://img1.baidu.com/it/u=1872879981,4129166334&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=653", "pronun": "칭정 샤오촨 페이시에"}, {"name": "原汁蒸生蚝", "korean": "자연산 활굴찜", "desc": "바다향 가득 머금은 탱글탱글한 알굴 찜", "price": "약 ¥45", "img": "https://img2.baidu.com/it/u=4275369168,2649997821&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=876", "pronun": "위안즈 정 셩하오"}, {"name": "渔家海鲜焖饭", "korean": "어가식 해물 솥밥", "desc": "조개와 굴을 넣어 지어낸 감칠맛 나는 영양 솥밥", "price": "약 ¥38", "img": "https://img2.baidu.com/it/u=2058623240,695744274&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=640", "pronun": "위자 하이시안 먼판"}], "dianping": "亚新渔家小船海鲜", "baidu_map": "烟台市牟平区养马岛 亚新渔家", "hours": "10:30 ~ 15:00, 16:30 ~ 20:30", "dianping_rating": "4.7점 (대중점평 섬 내 상위)", "tip": "스쿠터 일주 중 점심에 들르기 좋습니다. 수족관에서 무게를 달 때 바구니 물기를 털어달라고 꼭 말씀하세요.", "reviews": [{"user": "养马岛骑行者 (스쿠터 여행자)", "text": "亚新渔家小船海鲜 (양마도점)에서 먹은 가리비와 성게 요리가 신선했어요. 바다 보면서 시원한 맥주 한잔하기 최고!"}, {"user": "海边日记 (바다 여행자)", "text": "관광지 특유의 바가지 없이 정찰제로 운영해서 만족스러웠습니다. 해산물찜이 푸짐합니다."}]}, {"id": "d2_9", "name": "后海渔夫海鲜 (양마도 후해점)", "chinese_name": "后海渔夫海鲜 (养马岛店)", "category": "후해 절벽 전망 & 신선 조개구이", "address": "烟台市牟平区养马岛后海木栈道旁", "location_tip": "후해 목재 산책로 끝자락", "taxi_text": "师傅，请带我去：养马岛后海 后海渔夫海鲜", "price": "인당 약 ¥65~90 (약 12,000~17,000원)", "rating": "4.6", "tag": "절벽 바다 앞 조개구이 한상", "main_img": "https://img2.baidu.com/it/u=2170796046,729534280&fm=253&fmt=auto&app=120&f=JPEG?w=1101&h=800", "desc": "후해의 푸른 바다를 내려다보며 식사할 수 있는 테라스 식당. 조개구이와 가리비 찜, 시원한 맥주 한 잔 하기에 완벽한 위치입니다.", "dishes": [{"name": "炭烤大扇贝", "korean": "숯불 대왕 가리비구이", "desc": "큼직한 가리비에 다진 마늘과 당면을 올려 구워낸 요리", "price": "약 ¥10/개", "img": "https://img2.baidu.com/it/u=887425590,1303317593&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500", "pronun": "탄카오 다샨베이"}, {"name": "辣炒后海花蛤", "korean": "매운 바지락볶음", "desc": "청양고추 양념에 센 불로 볶아낸 칼칼한 조개볶음", "price": "약 ¥30", "img": "https://img2.baidu.com/it/u=4271999783,2440499095&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1025", "pronun": "라차오 허우하이 화가"}, {"name": "渔夫三鲜水饺", "korean": "삼선 해물 손만두", "desc": "새우, 돼지고기, 부추가 들어간 든든한 점심 식사", "price": "약 ¥35", "img": "https://img0.baidu.com/it/u=2253146395,622911362&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=1097", "pronun": "위푸 산시안 수이자오"}], "dianping": "后海渔夫海鲜(养马岛)", "baidu_map": "烟台市牟平区养马岛后海 后海渔夫", "hours": "10:30 ~ 15:00, 16:30 ~ 20:30", "dianping_rating": "4.6점 (대중점평 섬 내 상위)", "tip": "스쿠터 일주 중 점심에 들르기 좋습니다. 수족관에서 무게를 달 때 바구니 물기를 털어달라고 꼭 말씀하세요.", "reviews": [{"user": "养马岛骑行者 (스쿠터 여행자)", "text": "后海渔夫海鲜 (양마도 후해점)에서 먹은 가리비와 성게 요리가 신선했어요. 바다 보면서 시원한 맥주 한잔하기 최고!"}, {"user": "海边日记 (바다 여행자)", "text": "관광지 특유의 바가지 없이 정찰제로 운영해서 만족스러웠습니다. 해산물찜이 푸짐합니다."}]}, {"id": "d2_10", "name": "鸿福海鲜坊 (무핑 대교 입구점)", "chinese_name": "鸿福海鲜坊 (牟平店)", "category": "양마도 대교 남단 대형 정찰제 식당", "address": "烟台市牟平区新城大街与通海路交叉口", "location_tip": "양마도에서 시내 방향 나오는 길목", "taxi_text": "师傅，请带我去：牟平区新城大街 鸿福海鲜坊", "price": "인당 약 ¥75~100 (약 14,000~19,000원)", "rating": "4.7", "tag": "가족 단위 최고 쾌적 정찰제", "main_img": "https://img2.baidu.com/it/u=1886383099,3007667807&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "desc": "양마도를 둘러보고 나오는 길목에 위치한 깔끔한 대형 해산물 식당. 관광지 분위기 없이 쾌적한 룸과 정찰제 메뉴판으로 편안한 식사가 가능합니다.", "dishes": [{"name": "家常焖多宝鱼", "korean": "넙치 간장조림", "desc": "부드러운 흰살 넙치를 달콤짭조름하게 조려낸 생선 요리", "price": "약 ¥68", "img": "https://img2.baidu.com/it/u=60064130,3243126839&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "pronun": "지아창 먼 둬바오위"}, {"name": "大锅蒸贝类拼盘", "korean": "모듬 조개 찜 냄비", "desc": "가리비, 바지락, 백합을 푸짐하게 쪄낸 건강한 한상", "price": "약 ¥68", "img": "https://img1.baidu.com/it/u=2778164050,474219079&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=597", "pronun": "다궈 정 베이레이 핀판"}, {"name": "海胆紫菜蛋花汤", "korean": "성게알 김 계란탕", "desc": "부드러운 성게알과 김이 어우러진 시원하고 고소한 국물탕", "price": "약 ¥36", "img": "https://img0.baidu.com/it/u=1152115023,1599288257&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1044", "pronun": "하이단 쯔차이 단화탕"}], "dianping": "鸿福海鲜坊(牟平)", "baidu_map": "烟台市牟平区通海路 鸿福海鲜", "hours": "10:30 ~ 15:00, 16:30 ~ 20:30", "dianping_rating": "4.7점 (대중점평 섬 내 상위)", "tip": "스쿠터 일주 중 점심에 들르기 좋습니다. 수족관에서 무게를 달 때 바구니 물기를 털어달라고 꼭 말씀하세요.", "reviews": [{"user": "养马岛骑行者 (스쿠터 여행자)", "text": "鸿福海鲜坊 (무핑 대교 입구점)에서 먹은 가리비와 성게 요리가 신선했어요. 바다 보면서 시원한 맥주 한잔하기 최고!"}, {"user": "海边日记 (바다 여행자)", "text": "관광지 특유의 바가지 없이 정찰제로 운영해서 만족스러웠습니다. 해산물찜이 푸짐합니다."}]}], "day2_dinner": [{"id": "d2_d1", "name": "合丰烧烤 (허펑 샤오카오 芝罘老字号)", "chinese_name": "合丰烧烤 (幸福中路店)", "category": "연태 즈푸구 현지인 압도적 1위 참숯 양꼬치", "address": "烟台市芝罘区幸福中路59号", "location_tip": "시내 중심가에서 택시로 약 8~10분", "taxi_text": "师傅，请带我去：芝罘区幸福中路59号 合丰烧烤", "price": "인당 약 ¥60~85 (약 11,000~16,000원)", "rating": "4.9", "tag": "현지인 압도적 1등 숯불 양꼬치", "main_img": "https://img2.baidu.com/it/u=3351906086,2163914113&fm=253&fmt=auto&app=138&f=JPEG?w=634&h=475", "desc": "연태에서 '양꼬치' 하면 택시기사님부터 학생들까지 첫 손가락으로 꼽는 전설의 숯불구이 노포. 얼리지 않은 생양고기를 참숯에 구워 잡내 없이 고소한 육즙이 팡팡 터집니다.", "dishes": [{"name": "炭火鲜羊肉串", "korean": "참숯 생양꼬치 (시그니처)", "desc": "생양고기 살코기와 고소한 비계의 황금비율! 쯔란 시즈닝과 숯불향이 어우러진 최고의 맛", "price": "약 ¥3.5/꼬치", "img": "https://img1.baidu.com/it/u=3564207438,4055914498&fm=253&fmt=auto&app=120&f=JPEG?w=668&h=500", "pronun": "탄훠 시안 양로우촨"}, {"name": "招牌烤鸡爪", "korean": "쫀득바삭 숯불 닭발구이", "desc": "부드럽게 삶아낸 뒤 숯불에 노릇하게 구워 겉은 바삭하고 속은 젤라틴이 쫀득한 별미", "price": "약 ¥6/꼬치", "img": "https://img0.baidu.com/it/u=2203904910,1305836602&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500", "pronun": "자오파이 카오 지주아"}, {"name": "蒜蓉烤茄子", "korean": "마늘양념 통가지 숯불구이", "desc": "통가지를 반 갈라 다진 마늘과 고추 소스를 듬뿍 얹어 숯불에 구운 촉촉한 채소 안주", "price": "약 ¥16", "img": "https://img0.baidu.com/it/u=346105678,3946997072&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=652", "pronun": "쏸룽 카오 치에쯔"}], "dianping": "合丰烧烤(幸福中路店)", "baidu_map": "烟台市芝罘区幸福中路59号 合丰烧烤", "hours": "16:30 ~ 새벽 01:30", "dianping_rating": "4.9점 (연태 즈푸구 양꼬치 압도적 1위)", "tip": "연태 현지인들이 '양꼬치는 합풍'이라고 부르는 전설의 노포. 17시 30분 전 도착 권장.", "reviews": [{"user": "老烟台吃货", "text": "얼리지 않은 생양고기를 참숯에 구워 육즙이 팡팡 터집니다. 닭발구이와 마늘가지구이도 예술입니다."}, {"user": "串串小王子", "text": "택시 기사님 추천으로 왔는데 왜 1등인지 알겠네요. 쯔란 양념이 과하지 않고 고기 본연의 맛이 훌륭합니다."}]}, {"id": "d2_d2", "name": "阿楠·鲁菜·海鲜·全羊 (이마루점)", "chinese_name": "阿楠·鲁菜·海鲜 (二马路店)", "category": "라이저우(莱州)식 대왕 양꼬치 & 가마솥 양곰탕", "address": "烟台市芝罘区二马路46号", "location_tip": "조양가에서 도보 8분 거리", "taxi_text": "师傅，请带我去：芝罘区二马路46号 阿楠海鲜全羊", "price": "인당 약 ¥75~105 (약 14,000~20,000원)", "rating": "4.8", "tag": "대왕 숯불 양꼬치 & 양곰탕", "main_img": "https://img2.baidu.com/it/u=1886383099,3007667807&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "desc": "산동성 양고기 본고장 라이저우식 조리법을 고수하는 곳. 일반 꼬치 2.5배 크기의 묵직한 대왕 양꼬치와 24시간 우려낸 진한 양고기 탕으로 몸보신하기 좋습니다.", "dishes": [{"name": "莱州全羊大串", "korean": "특대형 참숯 양고기 꼬치", "desc": "큼직한 고깃덩어리를 참숯에 돌려가며 구워 한입 가득 씹히는 육즙이 일품", "price": "약 ¥8/꼬치", "img": "https://img1.baidu.com/it/u=4264977794,2937593745&fm=253&fmt=auto&app=138&f=JPEG?w=666&h=500", "pronun": "라이저우 취안양 다촨"}, {"name": "原汁全羊汤", "korean": "뽀얗고 진한 보양 양곰탕", "desc": "잡내 없이 뽀얗게 우려낸 진국물에 대파와 고수를 넣어 마시는 숙취 해소 탕", "price": "약 ¥38", "img": "https://img1.baidu.com/it/u=1837026551,543817414&fm=253&fmt=auto&app=138&f=JPEG?w=686&h=500", "pronun": "위안즈 취안양탕"}, {"name": "炭烤特制羊排", "korean": "숯불 양갈비 구이", "desc": "특제 쯔란 시즈닝을 발라 노릇노릇 구워낸 부드러운 양갈비", "price": "약 ¥68", "img": "https://img2.baidu.com/it/u=460644165,2261859708&fm=253&fmt=auto&app=138&f=JPEG?w=695&h=500", "pronun": "탄카오 터즈 양파이"}], "dianping": "阿楠海鲜全羊(二马路店)", "baidu_map": "烟台市芝罘区二马路46号 阿楠", "hours": "17:00 ~ 새벽 02:00 (야식 성업)", "dianping_rating": "4.8점 (즈푸구 야식 必吃榜)", "tip": "저녁 6시 반 이후 손님이 몰리니 일찍 가거나 2차로 밤 8시 넘어 방문 추천. 칭다오 원장 생맥주와 곁들이세요.", "reviews": [{"user": "串串迷 (양꼬치 매니아)", "text": "阿楠·鲁菜·海鲜·全羊 (이마루점) 양꼬치는 잡내 하나 없이 숯불 향이 살아있어요. 비계와 살코기 비율이 완벽합니다."}, {"user": "夜市王者 (야시장 식객)", "text": "통가지구이랑 닭발구이도 별미입니다. 시원한 맥주랑 마시면 여행의 피로가 싹 날아가네요."}]}, {"id": "d2_d3", "name": "三和野火炭烤 (남홍가 먹자골목점)", "chinese_name": "三和野火炭烤 (南洪街店)", "category": "남홍가 1등 핫플 & 활석화 숯불구이", "address": "烟台市芝罘区南洪街108号", "location_tip": "연태 제일의 먹자골목 남홍가 중심", "taxi_text": "师傅，请带我去：芝罘区南洪街108号 三和野火炭烤", "price": "인당 약 ¥65~90 (약 12,000~17,000원)", "rating": "4.7", "tag": "남홍가 야식 1등 활석화구이", "main_img": "https://img1.baidu.com/it/u=2434929789,2106844769&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1067", "desc": "오픈 냉장고에서 원하는 고기 꼬치와 싱싱한 활석화, 가리비를 직접 바구니에 골라 담으면 즉석에서 숯불에 구워주는 활기찬 야식 핫플레이스입니다.", "dishes": [{"name": "炭烤生蚝/天鹅蛋", "korean": "숯불 마늘 생굴구이", "desc": "살아있는 석화 위에 알싸한 다진 마늘 소스를 듬뿍 얹어 숯불에 구워낸 베스트셀러", "price": "약 ¥6/개", "img": "https://img0.baidu.com/it/u=1510999995,3301713283&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=889", "pronun": "탄카오 셩하오 / 톈어단"}, {"name": "野火招牌羊肉串", "korean": "야화 간판 양꼬치", "desc": "불맛 가득 육즙이 살아있는 숯불 시그니처 꼬치", "price": "약 ¥3.5/꼬치", "img": "https://img2.baidu.com/it/u=1329704516,3238037337&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=683", "pronun": "예훠 자오파이 양로우촨"}, {"name": "炼乳烤面包片", "korean": "달콤 바삭 연유 토스트 꼬치", "desc": "달콤한 연유를 발라 겉은 바삭하고 속은 촉촉하게 구운 완벽한 디저트", "price": "약 ¥3/꼬치", "img": "https://img0.baidu.com/it/u=2125862734,4290211092&fm=253&fmt=auto&app=120&f=JPEG?w=823&h=800", "pronun": "리안루 카오 미안바오피안"}], "dianping": "三和野火炭烤(南洪街店)", "baidu_map": "烟台市芝罘区南洪街108号 三和野火炭烤", "hours": "17:00 ~ 새벽 02:00 (야식 성업)", "dianping_rating": "4.7점 (즈푸구 야식 必吃榜)", "tip": "저녁 6시 반 이후 손님이 몰리니 일찍 가거나 2차로 밤 8시 넘어 방문 추천. 칭다오 원장 생맥주와 곁들이세요.", "reviews": [{"user": "串串迷 (양꼬치 매니아)", "text": "三和野火炭烤 (남홍가 먹자골목점) 양꼬치는 잡내 하나 없이 숯불 향이 살아있어요. 비계와 살코기 비율이 완벽합니다."}, {"user": "夜市王者 (야시장 식객)", "text": "통가지구이랑 닭발구이도 별미입니다. 시원한 맥주랑 마시면 여행의 피로가 싹 날아가네요."}]}, {"id": "d2_d4", "name": "三杯·碳烤大鲅鱼·红柳烤肉 (조양가점)", "chinese_name": "三杯·碳烤大鲅鱼 (朝阳街店)", "category": "조양가 분위기 펍 & 홍류나무 대왕 양꼬치", "address": "烟台市芝罘区朝阳街历史文化街区", "location_tip": "조양가 유럽풍 거리 중심부", "taxi_text": "师傅，请带我去：芝罘区朝阳街 三杯碳烤大鲅鱼", "price": "인당 약 ¥80~110 (약 15,000~21,000원)", "rating": "4.8", "tag": "홍류나무 양꼬치 & 삼치구이", "main_img": "https://img0.baidu.com/it/u=3192351425,41921774&fm=253&fmt=auto&app=138&f=JPEG?w=513&h=342", "desc": "조양가의 야경을 내려다보며 시원한 연태 생맥주와 홍류나무 가지에 꿴 특대 양꼬치, 불맛 가득한 숯불 삼치구이를 즐길 수 있는 감성 만점 공간입니다.", "dishes": [{"name": "红柳木羊肉大串", "korean": "자연산 홍류나무 양꼬치", "desc": "천연 홍류나무 가지의 그윽한 향이 양고기 속에 배어 육즙과 풍미가 극대화된 꼬치", "price": "약 ¥12/꼬치", "img": "https://img2.baidu.com/it/u=1485231097,2302538222&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500", "pronun": "훙류무 양로우 다촨"}, {"name": "炭烤整条大鲅鱼", "korean": "통 삼치 숯불 소금구이", "desc": "두툼한 연태 삼치 한 마리를 통째로 숯불에 노릇노릇 구워 겉바속촉 담백한 생선구이", "price": "약 ¥48", "img": "https://img0.baidu.com/it/u=3192351425,41921774&fm=253&fmt=auto&app=138&f=JPEG?w=513&h=342", "pronun": "탄카오 정탸오 다바위"}, {"name": "冰镇原浆大扎啤", "korean": "시원한 원장 생맥주", "desc": "효모가 살아있는 신선한 생맥주로 기름진 입안을 상쾌하게 씻어줌", "price": "약 ¥25", "img": "https://img2.baidu.com/it/u=2591782093,1195323788&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1065", "pronun": "삥전 위안지앙 다자피"}], "dianping": "三杯碳烤大鲅鱼(朝阳街店)", "baidu_map": "烟台市芝罘区朝阳街 三杯", "hours": "17:00 ~ 새벽 02:00 (야식 성업)", "dianping_rating": "4.8점 (즈푸구 야식 必吃榜)", "tip": "저녁 6시 반 이후 손님이 몰리니 일찍 가거나 2차로 밤 8시 넘어 방문 추천. 칭다오 원장 생맥주와 곁들이세요.", "reviews": [{"user": "串串迷 (양꼬치 매니아)", "text": "三杯·碳烤大鲅鱼·红柳烤肉 (조양가점) 양꼬치는 잡내 하나 없이 숯불 향이 살아있어요. 비계와 살코기 비율이 완벽합니다."}, {"user": "夜市王者 (야시장 식객)", "text": "통가지구이랑 닭발구이도 별미입니다. 시원한 맥주랑 마시면 여행의 피로가 싹 날아가네요."}]}, {"id": "d2_d5", "name": "腰前树电烤 (건설로 본점)", "chinese_name": "腰前树电烤 (建设路店)", "category": "로컬 청년들의 가성비 전기로스터 꼬치", "address": "烟台市芝罘区建设路52号", "location_tip": "즈푸구 중심 상권 도로변", "taxi_text": "师傅，请带我去：芝罘区建设路52号 腰前树电烤", "price": "인당 약 ¥50~70 (약 9,500~13,000원)", "rating": "4.7", "tag": "현지 청년 가성비 꼬치 아지트", "main_img": "https://img2.baidu.com/it/u=2678580744,2339519850&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=800", "desc": "특수 전기로스터로 타지 않고 균일하게 구워내 겉은 바삭하고 속은 촉촉한 양꼬치와 쫄깃한 소힘줄구이가 일품인 가성비 최고의 로컬 꼬치집입니다.", "dishes": [{"name": "嫩烤小羊肉", "korean": "부드러운 한입 양꼬치", "desc": "질기지 않고 부드럽게 씹히는 육즙 가득 가성비 양꼬치", "price": "약 ¥2.5/꼬치", "img": "https://img1.baidu.com/it/u=1352389618,1638200581&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=666", "pronun": "넌카오 샤오양로우"}, {"name": "特色烤牛板筋", "korean": "쫄깃한 소 힘줄구이", "desc": "씹을수록 고소하고 매콤한 쯔란 양념이 어우러진 안주", "price": "약 ¥3/꼬치", "img": "https://img2.baidu.com/it/u=153238736,1467798810&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=665", "pronun": "터써 카오 뉴반진"}, {"name": "香辣烤五花肉", "korean": "매콤 삼겹살 꼬치", "desc": "기름기가 쏙 빠져 바삭하고 매콤한 삼겹살 구이", "price": "약 ¥3.5/꼬치", "img": "https://img2.baidu.com/it/u=1861778446,3740265319&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=655", "pronun": "샹라 카오 우화로우"}], "dianping": "腰前树电烤(建设路店)", "baidu_map": "烟台市芝罘区建设路52号 腰前树电烤", "hours": "17:00 ~ 새벽 02:00 (야식 성업)", "dianping_rating": "4.7점 (즈푸구 야식 必吃榜)", "tip": "저녁 6시 반 이후 손님이 몰리니 일찍 가거나 2차로 밤 8시 넘어 방문 추천. 칭다오 원장 생맥주와 곁들이세요.", "reviews": [{"user": "串串迷 (양꼬치 매니아)", "text": "腰前树电烤 (건설로 본점) 양꼬치는 잡내 하나 없이 숯불 향이 살아있어요. 비계와 살코기 비율이 완벽합니다."}, {"user": "夜市王者 (야시장 식객)", "text": "통가지구이랑 닭발구이도 별미입니다. 시원한 맥주랑 마시면 여행의 피로가 싹 날아가네요."}]}, {"id": "d2_d6", "name": "西贝莜面村 (시베이 振华商厦店)", "chinese_name": "西贝莜面村 (振华商厦店)", "category": "백화점 7층 프리미엄 내몽골 양갈비 & 꼬치", "address": "烟台市芝罘区西大街8号 振华商厦 7楼", "location_tip": "고급 백화점 7층 전문식당가", "taxi_text": "师傅，请带我去：芝罘区西大街 振华商厦 西贝莜面村", "price": "인당 약 ¥90~125 (약 17,000~24,000원)", "rating": "4.9", "tag": "청결도 100% 프리미엄 양갈비", "main_img": "https://img0.baidu.com/it/u=2932000657,321037251&fm=253&fmt=auto&app=138&f=JPEG?w=509&h=500", "desc": "길거리 포차의 흡연이나 위생이 꺼려지는 분들을 위한 프리미엄 대형 브랜드. 최고급 내몽골산 어린양으로만 만든 양갈비 로스트와 꼬치가 예술입니다.", "dishes": [{"name": "蒙古大汗烤羊排", "korean": "프리미엄 숯불 통양갈비 로스트", "desc": "겉은 황금빛으로 바삭하고 속은 촉촉하게 구워져 잡내 없이 감탄을 자아내는 통양갈비", "price": "약 ¥139", "img": "https://img2.baidu.com/it/u=3199923189,1752946691&fm=253&fmt=auto&app=138&f=JPEG?w=686&h=500", "pronun": "멍구 다한 카오 양파이"}, {"name": "草原羔羊肉串", "korean": "특상급 어린양 생꼬치", "desc": "신선한 내몽골 어린양 생고기만 엄선해 구워낸 프리미엄 양꼬치", "price": "약 ¥9/꼬치", "img": "https://img0.baidu.com/it/u=573525267,1491964574&fm=253&fmt=auto&app=138&f=JPEG?w=602&h=500", "pronun": "차오위안 가오양로우촨"}, {"name": "西贝手洗凉皮", "korean": "새콤매콤 수제 량피", "desc": "고기 먹는 중간에 입가심으로 완벽한 새콤한 비빔면", "price": "약 ¥29", "img": "https://img0.baidu.com/it/u=1877745463,2025623158&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500", "pronun": "시베이 쇼우시 량피"}], "dianping": "西贝莜面村(振华商厦店)", "baidu_map": "烟台市芝罘区西大街8号 振华商厦 西贝", "hours": "17:00 ~ 새벽 02:00 (야식 성업)", "dianping_rating": "4.9점 (즈푸구 야식 必吃榜)", "tip": "저녁 6시 반 이후 손님이 몰리니 일찍 가거나 2차로 밤 8시 넘어 방문 추천. 칭다오 원장 생맥주와 곁들이세요.", "reviews": [{"user": "串串迷 (양꼬치 매니아)", "text": "西贝莜面村 (시베이 振华商厦店) 양꼬치는 잡내 하나 없이 숯불 향이 살아있어요. 비계와 살코기 비율이 완벽합니다."}, {"user": "夜市王者 (야시장 식객)", "text": "통가지구이랑 닭발구이도 별미입니다. 시원한 맥주랑 마시면 여행의 피로가 싹 날아가네요."}]}, {"id": "d2_d7", "name": "四点半大排档 (시내 必吃榜 야시장 포차)", "chinese_name": "四点半大排档", "category": "연태 대중점평 必吃榜 실내 해산물 포차", "address": "烟台市芝罘区西南河路216号", "location_tip": "서남하로 상권, 저녁 4시반 오픈", "taxi_text": "师傅，请带我去：芝罘区西南河路 四点半大排档", "price": "인당 약 ¥70~95 (약 13,000~18,000원)", "rating": "4.8", "tag": "대중점평 必吃榜 해물포차", "main_img": "https://img0.baidu.com/it/u=3984895376,398672807&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=655", "desc": "오후 4시 반 오픈하여 새벽까지 북적이는 연태 최고 핫플 대배당. 숯불 해물구이, 꼬치, 마라 해산물 볶음으로 밤새 고량주와 맥주를 마시기 최고입니다.", "dishes": [{"name": "招牌炭烤生蚝", "korean": "특제 마늘소스 숯불 굴구이", "desc": "통통한 알굴 위에 다진 마늘과 고추를 듬뿍 얹어 구워낸 시그니처", "price": "약 ¥6/개", "img": "https://img1.baidu.com/it/u=2265722056,1744584214&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "pronun": "자오파이 탄카오 셩하오"}, {"name": "香辣小龙虾", "korean": "매콤 마라 민물가재(마라룽샤)", "desc": "비법 매콤 마라 양념에 볶아낸 중독성 강한 가재 요리", "price": "약 ¥68", "img": "https://img1.baidu.com/it/u=3118298429,2233856102&fm=253&fmt=auto?w=1271&h=800", "pronun": "샹라 샤오룽샤"}, {"name": "特色烤羊肉小串", "korean": "참숯 양꼬치 묶음", "desc": "불맛과 쯔란 향이 입혀진 고소한 양꼬치 세트", "price": "약 ¥30/10개", "img": "https://img2.baidu.com/it/u=1136793035,712147638&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1067", "pronun": "터써 카오 양로우 샤오촨"}], "dianping": "四点半大排档", "baidu_map": "烟台市芝罘区西南河路 四点半大排档", "hours": "17:00 ~ 새벽 02:00 (야식 성업)", "dianping_rating": "4.8점 (즈푸구 야식 必吃榜)", "tip": "저녁 6시 반 이후 손님이 몰리니 일찍 가거나 2차로 밤 8시 넘어 방문 추천. 칭다오 원장 생맥주와 곁들이세요.", "reviews": [{"user": "串串迷 (양꼬치 매니아)", "text": "四点半大排档 (시내 必吃榜 야시장 포차) 양꼬치는 잡내 하나 없이 숯불 향이 살아있어요. 비계와 살코기 비율이 완벽합니다."}, {"user": "夜市王者 (야시장 식객)", "text": "통가지구이랑 닭발구이도 별미입니다. 시원한 맥주랑 마시면 여행의 피로가 싹 날아가네요."}]}, {"id": "d2_d8", "name": "尚德·小龙虾·烧烤 (대해양로점)", "chinese_name": "尚德·小龙虾·烧烤 (大海阳路店)", "category": "마늘버터 룽샤 & 참숯 꼬치구이 必吃榜", "address": "烟台市芝罘区大海阳路78号", "location_tip": "대해양로 번화가 위치", "taxi_text": "师傅，请带我去：芝罘区大海阳路78号 尚德小龙虾", "price": "인당 약 ¥75~105 (약 14,000~20,000원)", "rating": "4.8", "tag": "마늘 룽샤 & 양꼬치 必吃榜", "main_img": "https://img1.baidu.com/it/u=1492062537,4150144860&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500", "desc": "대중점평 야식 부문 1위에 오른 핫플. 황금 마늘소스가 듬뿍 올라간 마늘 룽샤와 숯불 양꼬치의 궁합으로 현지 직장인들이 퇴근 후 몰려드는 곳입니다.", "dishes": [{"name": "金汤蒜泥小龙虾", "korean": "황금 마늘소스 마라룽샤", "desc": "자극적이지 않고 달콤 알싸한 마늘소스가 가재 살에 듬뿍 배어든 인기 메뉴", "price": "약 ¥78", "img": "https://img2.baidu.com/it/u=2955874558,963539944&fm=253&fmt=auto&app=138&f=JPEG?w=1067&h=800", "pronun": "진탕 쏸니 샤오룽샤"}, {"name": "炭烤嫩羊肉串", "korean": "참숯 촉촉 양꼬치", "desc": "신선한 양고기를 숯불에 겉바속촉으로 구워낸 꼬치", "price": "약 ¥3.5/꼬치", "img": "https://img0.baidu.com/it/u=1148595737,167120433&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=651", "pronun": "탄카오 넌 양로우촨"}, {"name": "香烤锡纸脑花/金针菇", "korean": "은박지 마늘 팽이버섯구이", "desc": "지글지글 끓는 은박지 소스에 찍어먹는 매콤한 채소 구이", "price": "약 ¥18", "img": "https://img0.baidu.com/it/u=490839968,2030076940&fm=253&fmt=auto&app=138&f=JPEG?w=685&h=500", "pronun": "샹카오 시즈 진전구"}], "dianping": "尚德小龙虾烧烤(大海阳路店)", "baidu_map": "烟台市芝罘区大海阳路78号 尚德", "hours": "17:00 ~ 새벽 02:00 (야식 성업)", "dianping_rating": "4.8점 (즈푸구 야식 必吃榜)", "tip": "저녁 6시 반 이후 손님이 몰리니 일찍 가거나 2차로 밤 8시 넘어 방문 추천. 칭다오 원장 생맥주와 곁들이세요.", "reviews": [{"user": "串串迷 (양꼬치 매니아)", "text": "尚德·小龙虾·烧烤 (대해양로점) 양꼬치는 잡내 하나 없이 숯불 향이 살아있어요. 비계와 살코기 비율이 완벽합니다."}, {"user": "夜市王者 (야시장 식객)", "text": "통가지구이랑 닭발구이도 별미입니다. 시원한 맥주랑 마시면 여행의 피로가 싹 날아가네요."}]}, {"id": "d2_d9", "name": "老船长海鲜烧烤 (조양가 인근점)", "chinese_name": "老船长海鲜烧烤", "category": "활어 패류 숯불 직화구이 & 포차", "address": "烟台市芝罘区海岸街12号", "location_tip": "조양가 북쪽 해안가 바로 앞", "taxi_text": "师傅，请带我去：芝罘区海岸街12号 老船长海鲜烧烤", "price": "인당 약 ¥70~95 (약 13,000~18,000원)", "rating": "4.7", "tag": "해안가 낭만 숯불 해산물", "main_img": "https://img2.baidu.com/it/u=4043999058,778931159&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=653", "desc": "선장 컨셉의 감성적인 인테리어와 바다 바로 앞에서 굽는 활가리비, 석화, 양꼬치로 유명한 조양가 인근 인기 야간 식당입니다.", "dishes": [{"name": "招牌炭烤生蚝拼盘", "korean": "숯불 모듬 굴·조개 한판", "desc": "살아있는 석화와 조개류를 즉석 숯불에 구워내는 안주", "price": "약 ¥58", "img": "https://img0.baidu.com/it/u=867521381,4010107308&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "pronun": "자오파이 탄카오 셩하오 핀판"}, {"name": "红柳木烤肉大串", "korean": "홍류나무 양꼬치", "desc": "두툼하게 썬 양고기를 홍류나무에 꿰어 구운 풍미 넘치는 꼬치", "price": "약 ¥10/꼬치", "img": "https://img2.baidu.com/it/u=2040124333,1168062423&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=653", "pronun": "훙류무 카오로우 다촨"}, {"name": "疙瘩汤", "korean": "속풀이 수제비탕", "desc": "술 마시는 중간에 속을 따뜻하게 데워주는 해물 국물", "price": "약 ¥25", "img": "https://img2.baidu.com/it/u=1989833041,3541131993&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=666", "pronun": "거다탕"}], "dianping": "老船长海鲜烧烤", "baidu_map": "烟台市芝罘区海岸街 老船长", "hours": "17:00 ~ 새벽 02:00 (야식 성업)", "dianping_rating": "4.7점 (즈푸구 야식 必吃榜)", "tip": "저녁 6시 반 이후 손님이 몰리니 일찍 가거나 2차로 밤 8시 넘어 방문 추천. 칭다오 원장 생맥주와 곁들이세요.", "reviews": [{"user": "串串迷 (양꼬치 매니아)", "text": "老船长海鲜烧烤 (조양가 인근점) 양꼬치는 잡내 하나 없이 숯불 향이 살아있어요. 비계와 살코기 비율이 완벽합니다."}, {"user": "夜市王者 (야시장 식객)", "text": "통가지구이랑 닭발구이도 별미입니다. 시원한 맥주랑 마시면 여행의 피로가 싹 날아가네요."}]}, {"id": "d2_d10", "name": "聚味烤肉·泥炉烤肉 (즈푸구점)", "chinese_name": "聚味泥炉烤肉", "category": "동북 전통 진흙화로 숯불 생소고기·양고기", "address": "烟台市芝罘区南大街128号", "location_tip": "남대가 중심 상가 2층", "taxi_text": "师傅，请带我去：芝罘区南大街 聚味泥炉烤肉", "price": "인당 약 ¥75~100 (약 14,000~19,000원)", "rating": "4.8", "tag": "전통 진흙화로 직화 숯불구이", "main_img": "https://img0.baidu.com/it/u=2224180594,2087228086&fm=253&fmt=auto&app=138&f=JPEG?w=545&h=500", "desc": "특수 제작된 진흙 화로(泥炉)에 참숯을 가득 담아 생소갈비살과 양고기를 구워 먹는 노포 스타일 고깃집. 열기가 오래 보존되어 육즙이 가득합니다.", "dishes": [{"name": "原味秘制大块牛肉", "korean": "특제 양념 생소갈비살", "desc": "비법 양념에 재워 진흙화로에 센 불로 구워먹는 육즙 가득 소고기", "price": "약 ¥58", "img": "https://img2.baidu.com/it/u=789560607,884065400&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "pronun": "위안웨이 미즈 다콰이 뉴로우"}, {"name": "鲜羊肉大串", "korean": "화로 생양꼬치", "desc": "화로 위에서 지글지글 직접 구워 먹는 재미가 있는 생양꼬치", "price": "약 ¥5/꼬치", "img": "https://img0.baidu.com/it/u=1392455296,580275910&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=653", "pronun": "시안 양로우 다촨"}, {"name": "特色冷面", "korean": "얼음 동동 동북 물냉면", "desc": "기름진 고기를 먹은 후 입안을 개운하게 얼려주는 새콤달콤 냉면", "price": "약 ¥20", "img": "https://img0.baidu.com/it/u=1537202389,3638360663&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "pronun": "터써 렁몐"}], "dianping": "聚味泥炉烤肉", "baidu_map": "烟台市芝罘区南大街 聚味烤肉", "hours": "17:00 ~ 새벽 02:00 (야식 성업)", "dianping_rating": "4.8점 (즈푸구 야식 必吃榜)", "tip": "저녁 6시 반 이후 손님이 몰리니 일찍 가거나 2차로 밤 8시 넘어 방문 추천. 칭다오 원장 생맥주와 곁들이세요.", "reviews": [{"user": "串串迷 (양꼬치 매니아)", "text": "聚味烤肉·泥炉烤肉 (즈푸구점) 양꼬치는 잡내 하나 없이 숯불 향이 살아있어요. 비계와 살코기 비율이 완벽합니다."}, {"user": "夜市王者 (야시장 식객)", "text": "통가지구이랑 닭발구이도 별미입니다. 시원한 맥주랑 마시면 여행의 피로가 싹 날아가네요."}]}], "day3_breakfast": [{"id": "d3_1", "name": "蓝白自选餐厅 (란바이 烟台山店)", "chinese_name": "蓝白自选餐厅 (烟台山店)", "category": "산동성 1등 국민 조식 뷔페 (트레이 픽업)", "address": "烟台市芝罘区海岸路2号", "location_tip": "연태산 정문 입구 도보 2분", "taxi_text": "师傅，请带我去：芝罘区海岸路2号 蓝白自选餐厅", "price": "인당 약 ¥15~25 (약 2,800~4,700원)", "rating": "4.8", "tag": "산동 국민 조식 1등 체인", "main_img": "https://img1.baidu.com/it/u=3562311814,566810186&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "desc": "연태 토박이들의 하루를 깨우는 국민 조식 뷔페. 트레이를 들고 갓 튀겨낸 황금 유타오, 뜨끈한 두유, 교동 왕만두, 훈툰 등을 자유롭게 골라 담아 먹는 필수 코스입니다.", "dishes": [{"name": "现炸香脆油条", "korean": "바삭 쫄깃 꽈배기 튀김빵", "desc": "가마솥 기름에서 갓 건져내 겉은 바삭하고 속은 쫄깃한 중국 국민 아침 빵", "price": "약 ¥3", "img": "https://img2.baidu.com/it/u=430594873,1347643338&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1028", "pronun": "시안자 샹추이 요우탸오"}, {"name": "现磨原味豆浆", "korean": "진하고 구수한 생 콩국", "desc": "신선한 콩을 갓 갈아내어 따끈하고 고소한 국물로, 유타오를 푹 적셔 먹는 아침의 정석", "price": "약 ¥3", "img": "https://img1.baidu.com/it/u=2346604664,1958584125&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=666", "pronun": "시안모 위안웨이 또우장"}, {"name": "胶东手工大包子", "korean": "속이 꽉 찬 수제 왕만두", "desc": "돼지고기 부추소 또는 새우달걀소가 터질 듯이 들어간 갓 쪄낸 왕만두", "price": "약 ¥5", "img": "https://img1.baidu.com/it/u=2933284924,172331547&fm=253&fmt=auto&app=138&f=JPEG?w=686&h=500", "pronun": "지아오둥 쇼우궁 다빠오즈"}], "dianping": "蓝白自选餐厅(烟台山店)", "baidu_map": "烟台市芝罘区海岸路2号 蓝白", "hours": "06:00 ~ 13:30 (아침~점심)", "dianping_rating": "4.8점 (산동성 국민 조식 1위)", "tip": "연태산 정문 앞이라 산책 직전 아침 먹기 최적. 트레이에 먹고 싶은 것을 담아서 마지막에 계산하는 뷔페식입니다.", "reviews": [{"user": "烟台市民", "text": "연태 사람이라면 누구나 자란 란바이. 갓 튀긴 황금 유타오를 따뜻한 무가당 콩국에 적셔 먹으면 10위안으로 극락 갑니다."}, {"user": "MorningTraveler", "text": "수제 왕만두와 완탕도 속이 꽉 차 있어요. 깨끗하고 회전율이 빨라 여행 아침으로 강추합니다."}]}, {"id": "d3_2", "name": "8鲜蓬莱小面 (바시안 펑라이샤오몐 胜利路总店)", "chinese_name": "8鲜蓬莱小面 (胜利路店)", "category": "연태 무형문화재 전통 아침 해물국수", "address": "烟台市芝罘区胜利路152号", "location_tip": "조양가/완다플라자 인근", "taxi_text": "师傅，请带我去：芝罘区胜利路152号 8鲜蓬莱小面", "price": "인당 약 ¥18~30 (약 3,400~5,700원)", "rating": "4.8", "tag": "200년 무형문화재 아침면", "main_img": "https://img2.baidu.com/it/u=2106955726,1435111931&fm=253&fmt=auto&app=138&f=JPEG?w=667&h=500", "desc": "연태를 대표하는 200년 전통의 무형문화재 면요리. 실처럼 가늘고 쫄깃한 생면에 도미와 가리비 육수를 진하게 우려낸 전분 국물을 부어 먹는 아침 최고의 명물입니다.", "dishes": [{"name": "招牌加吉鱼小面", "korean": "참돔 육수 펑라이 소면", "desc": "신선한 참돔 생선살 육수의 깊고 개운한 감칠맛이 가늘고 탄력 있는 수타면에 듬뿍 배어드는 국수", "price": "약 ¥18", "img": "https://img0.baidu.com/it/u=2317660443,2442226212&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1017", "pronun": "자오파이 지아지위 샤오몐"}, {"name": "鲜海胆小面", "korean": "녹진한 성게알 아침국수", "desc": "황금빛 성게알을 듬뿍 얹어 풍미를 한 단계 끌어올린 프리미엄 소면", "price": "약 ¥28", "img": "https://img2.baidu.com/it/u=2106955726,1435111931&fm=253&fmt=auto&app=138&f=JPEG?w=667&h=500", "pronun": "시안 하이단 샤오몐"}, {"name": "秘制卤蛋", "korean": "간장조림 한방 달걀", "desc": "국수와 함께 곁들여 먹는 짭조름하고 고소한 삶은 달걀", "price": "약 ¥2.5", "img": "https://img2.baidu.com/it/u=81122143,1615948447&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "pronun": "미즈 루단"}], "dianping": "8鲜蓬莱小面(胜利路店)", "baidu_map": "烟台市芝罘区胜利路152号 8鲜蓬莱小面", "hours": "06:30 ~ 14:00", "dianping_rating": "4.8점 (200년 무형문화재 소면)", "tip": "연태 200년 전통의 무형문화재 아침면. 도미 육수(加吉鱼)를 기본으로 시키세요.", "reviews": [{"user": "面条发烧友", "text": "명주실처럼 가늘고 쫄깃한 수타면에 진한 해물 전분 육수가 코팅되어 후루룩 넘어갑니다. 인생 국수예요."}, {"user": "Foodie_KR", "text": "성게알 소면도 별미입니다. 국물이 깊고 개운해서 아침 해장으로 최고였습니다."}]}, {"id": "d3_3", "name": "福记海鲜疙瘩汤 (푸지 거다탕 朝阳街店)", "chinese_name": "福记疙瘩汤 (朝阳街店)", "category": "숙취 완벽 해소 해물수제비 & 군만두", "address": "烟台市芝罘区朝阳街南首", "location_tip": "조양가 남쪽 보행가 입구", "taxi_text": "师傅，请带我去：芝罘区朝阳街南首 福记疙瘩汤", "price": "인당 약 ¥30~48 (약 5,700~9,000원)", "rating": "4.7", "tag": "전날 마신 술 완벽 해장 뚝배기", "main_img": "https://img1.baidu.com/it/u=1304615120,4165131819&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "desc": "연태산 아침 산책 전, 전날 마신 고량주와 맥주를 깨끗하게 해장해 주는 뚝배기 수제비 전문점. 맑고 개운한 맛과 칼칼한 맛 모두 훌륭합니다.", "dishes": [{"name": "原汁蛤蜊疙瘩汤", "korean": "시원 칼칼 바지락 해장탕", "desc": "조갯살이 듬뿍 들어가 속이 확 풀리는 개운한 아침 해장 뚝배기", "price": "약 ¥28", "img": "https://img0.baidu.com/it/u=3181014482,918431603&fm=253&fmt=auto&app=138&f=JPEG?w=523&h=500", "pronun": "위안즈 거리 거다탕"}, {"name": "脆皮鲜肉煎包", "korean": "바삭촉촉 고기 군만두", "desc": "밑면은 바삭하고 윗면은 촉촉한 갓 구워낸 고기 육즙 군만두", "price": "약 ¥15", "img": "https://img1.baidu.com/it/u=1019172028,3381623154&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "pronun": "추이피 시안로우 지안빠오"}, {"name": "爽口海带丝", "korean": "새콤 다시마무침", "desc": "아침 입맛을 돋워주는 상큼하고 아삭한 반찬", "price": "약 ¥10", "img": "https://img1.baidu.com/it/u=1304615120,4165131819&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "pronun": "솽커우 하이따이쓰"}], "dianping": "福记疙瘩汤(朝阳街店)", "baidu_map": "烟台市芝罘区朝阳街 福记疙瘩汤", "hours": "06:30 ~ 10:30 (모닝 성업)", "dianping_rating": "4.7점 (로컬 아침 1등)", "tip": "아침 7시~8시 반이 가장 갓 만든 음식이 쏟아져 나오는 골든타임입니다. 포장도 가능합니다.", "reviews": [{"user": "晨跑达人 (모닝 러너)", "text": "福记海鲜疙瘩汤 (푸지 거다탕 朝阳街店)에서 따뜻한 국물과 만두로 든든하게 속을 채웠어요. 가격도 너무 착하고 현지 감성 제대로입니다."}, {"user": "早餐控 (조식 러버)", "text": "갓 튀겨낸 유타오와 콩국, 그리고 맑은 수제비탕의 조합이 아침을 행복하게 만들어 줍니다."}]}, {"id": "d3_4", "name": "李记老号灌汤包 (소청리 고택점)", "chinese_name": "李记灌汤包 (所城里店)", "category": "명나라 고성 골목 육즙 가득 샤오롱바오", "address": "烟台市芝罘区所城里正街", "location_tip": "소청리 역사 골목 중심", "taxi_text": "师傅，请带我去：芝罘区所城里正街 李记灌汤包", "price": "인당 약 ¥25~40 (약 4,700~7,600원)", "rating": "4.8", "tag": "육즙 팡팡 수제 샤오롱바오", "main_img": "https://img2.baidu.com/it/u=3438624185,641219573&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "desc": "조양가 바로 옆 소청리 전통 한옥 골목에 위치한 수제 만두 노포. 피를 살짝 찢어 뜨거운 육즙을 마신 뒤 생강채 간장에 찍어 먹는 딤섬의 진수입니다.", "dishes": [{"name": "招牌鲜肉灌汤包", "korean": "육즙 가득 수제 샤오롱바오", "desc": "숟가락에 올려 피를 톡 터뜨리면 진한 고기 육즙이 숟가락 가득 차오르는 만두", "price": "약 ¥22/판", "img": "https://img2.baidu.com/it/u=1084330988,2798923908&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=656", "pronun": "자오파이 시안로우 관탕빠오"}, {"name": "虾仁三鲜灌汤包", "korean": "통새우 삼선 육즙만두", "desc": "탱글탱글한 통새우 살과 돼지고기가 어우러진 최고 인기 찜만두", "price": "약 ¥28/판", "img": "https://img2.baidu.com/it/u=3302331458,3052310498&fm=253&fmt=auto&app=138&f=JPEG?w=508&h=500", "pronun": "샤런 산시안 관탕빠오"}, {"name": "紫菜蛋花汤", "korean": "따뜻한 김 계란국", "desc": "만두와 함께 먹기 좋은 부드럽고 개운한 국물", "price": "약 ¥8", "img": "https://img2.baidu.com/it/u=1084330988,2798923908&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=656", "pronun": "쯔차이 단화탕"}], "dianping": "李记灌汤包(所城里)", "baidu_map": "烟台市芝罘区所城里 李记灌汤包", "hours": "06:30 ~ 10:30 (모닝 성업)", "dianping_rating": "4.8점 (로컬 아침 1등)", "tip": "아침 7시~8시 반이 가장 갓 만든 음식이 쏟아져 나오는 골든타임입니다. 포장도 가능합니다.", "reviews": [{"user": "晨跑达人 (모닝 러너)", "text": "李记老号灌汤包 (소청리 고택점)에서 따뜻한 국물과 만두로 든든하게 속을 채웠어요. 가격도 너무 착하고 현지 감성 제대로입니다."}, {"user": "早餐控 (조식 러버)", "text": "갓 튀겨낸 유타오와 콩국, 그리고 맑은 수제비탕의 조합이 아침을 행복하게 만들어 줍니다."}]}, {"id": "d3_5", "name": "星巴克 (스타벅스 烟台山店)", "chinese_name": "星巴克 (烟台山店)", "category": "100년 영사관 문화재 건물 & 오션뷰 카페", "address": "烟台市芝罘区海岸路17号", "location_tip": "연태산 공원 입구 옛 서양 영사관", "taxi_text": "师傅，请带我去：芝罘区海岸路17号 星巴克烟台山店", "price": "인당 약 ¥35~50 (약 6,500~9,500원)", "rating": "4.9", "tag": "중국에서 가장 아름다운 스타벅스", "main_img": "https://img1.baidu.com/it/u=2163544476,2654652523&fm=253&fmt=auto&app=138&f=JPEG?w=514&h=500", "desc": "100년 된 근대 서양식 석조 건물 전체를 사용하는 스타벅스. 2층 테라스에서 바다와 푸른 소나무를 바라보며 모닝커피를 마시기에 최고입니다.", "dishes": [{"name": "美式咖啡", "korean": "상쾌한 모닝 아메리카노", "desc": "깔끔하게 아침을 깨우는 에스프레소 커피", "price": "약 ¥30", "img": "https://img2.baidu.com/it/u=4265525081,3722846920&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=640", "pronun": "메이스 카페이"}, {"name": "全麦牛肉贝果", "korean": "통밀 소고기 베이글 샌드위치", "desc": "든든하고 담백한 모닝 베이글 식사", "price": "약 ¥28", "img": "https://img1.baidu.com/it/u=2122823238,2978711442&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "pronun": "취안마이 뉴로우 베이궈"}, {"name": "法式黄油可颂", "korean": "버터 크루아상", "desc": "바삭하고 버터 풍미 가득한 모닝 페이스트리", "price": "약 ¥20", "img": "http://t15.baidu.com/it/u=451428499,1983086736&fm=224&app=112&f=JPEG?w=500&h=500", "pronun": "파스 황유 커쏭"}], "dianping": "星巴克(烟台山店)", "baidu_map": "烟台市芝罘区海岸路17号 星巴克", "hours": "06:30 ~ 10:30 (모닝 성업)", "dianping_rating": "4.9점 (로컬 아침 1등)", "tip": "아침 7시~8시 반이 가장 갓 만든 음식이 쏟아져 나오는 골든타임입니다. 포장도 가능합니다.", "reviews": [{"user": "晨跑达人 (모닝 러너)", "text": "星巴克 (스타벅스 烟台山店)에서 따뜻한 국물과 만두로 든든하게 속을 채웠어요. 가격도 너무 착하고 현지 감성 제대로입니다."}, {"user": "早餐控 (조식 러버)", "text": "갓 튀겨낸 유타오와 콩국, 그리고 맑은 수제비탕의 조합이 아침을 행복하게 만들어 줍니다."}]}, {"id": "d3_6", "name": "乔尔·卢布松咖啡 (Joel Robuchon 조양가점)", "chinese_name": "乔尔·卢布松 (朝阳街店)", "category": "미슐랭 31스타 셰프의 프렌치 베이커리 브런치", "address": "烟台市芝罘区朝阳街中段", "location_tip": "조양가 유럽풍 건축 보행가 중심", "taxi_text": "师傅，请带我去：芝罘区朝阳街 乔尔卢布松", "price": "인당 약 ¥45~75 (약 8,500~14,000원)", "rating": "4.8", "tag": "프렌치 크루아상 & 스페셜티 브런치", "main_img": "https://img0.baidu.com/it/u=1569116477,2116683510&fm=253&fmt=auto&app=138&f=JPEG?w=737&h=500", "desc": "프랑스 미슐랭 거장의 프리미엄 베이커리. 조양가의 낭만적인 풍경 속에서 프랑스산 버터 풍미 가득한 정통 크루아상과 브런치를 즐겨보세요.", "dishes": [{"name": "经典法式可颂", "korean": "겉바속촉 명품 크루아상", "desc": "프랑스 최고급 버터로 결 하나하나 구워낸 바삭함의 정수", "price": "약 ¥22", "img": "https://img2.baidu.com/it/u=2136284732,3575566822&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=500", "pronun": "징디안 파스 커쏭"}, {"name": "澳白咖啡", "korean": "진한 플랫화이트", "desc": "벨벳 밀크폼과 진한 에스프레소의 완벽한 밸런스", "price": "약 ¥38", "img": "https://img1.baidu.com/it/u=2901665400,3406760459&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=666", "pronun": "아오바이 카페이"}, {"name": "法式草莓千层酥", "korean": "딸기 밀푀유", "desc": "바삭한 파이와 바닐라빈 커스터드 크림이 어우러진 디저트", "price": "약 ¥45", "img": "https://img1.baidu.com/it/u=3011680959,686363511&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=666", "pronun": "파스 차오메이 치안청쑤"}], "dianping": "乔尔卢布松(朝阳街店)", "baidu_map": "烟台市芝罘区朝阳街 乔尔卢布松", "hours": "06:30 ~ 10:30 (모닝 성업)", "dianping_rating": "4.8점 (로컬 아침 1등)", "tip": "아침 7시~8시 반이 가장 갓 만든 음식이 쏟아져 나오는 골든타임입니다. 포장도 가능합니다.", "reviews": [{"user": "晨跑达人 (모닝 러너)", "text": "乔尔·卢布松咖啡 (Joel Robuchon 조양가점)에서 따뜻한 국물과 만두로 든든하게 속을 채웠어요. 가격도 너무 착하고 현지 감성 제대로입니다."}, {"user": "早餐控 (조식 러버)", "text": "갓 튀겨낸 유타오와 콩국, 그리고 맑은 수제비탕의 조합이 아침을 행복하게 만들어 줍니다."}]}, {"id": "d3_7", "name": "所城里·张颜记 (소청리 고택 조식관)", "chinese_name": "所城里·张颜记", "category": "명나라 고택 안 로컬 완탕 & 탕포", "address": "烟台市芝罘区所城里正街42号", "location_tip": "소청리 고택 보행거리 내", "taxi_text": "师傅，请带我去：芝罘区所城里正街 张颜记", "price": "인당 약 ¥20~35 (약 3,800~6,600원)", "rating": "4.7", "tag": "소청리 고택 감성 완탕집", "main_img": "https://img2.baidu.com/it/u=2775684135,2334792268&fm=253&fmt=auto&app=138&f=JPEG?w=514&h=500", "desc": "고풍스러운 청나라 고택 툇마루에서 아침 햇살을 받으며 먹는 맑은 훈툰(완탕)과 바삭한 화소(전통 호떡)가 일품인 로컬 조식 명소입니다.", "dishes": [{"name": "皮薄馅大鲜肉馄饨", "korean": "얇은 피 고기 완탕국", "desc": "부드러운 만두피가 후루룩 넘어가는 따뜻한 완탕국", "price": "약 ¥16", "img": "https://img2.baidu.com/it/u=2556607553,2450671364&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=656", "pronun": "피바오 시안다 시안로우 훈툰"}, {"name": "传统肉馅火烧", "korean": "전통 고기 화소 (중국식 페이스트리 호떡)", "desc": "겉은 바삭하고 안에는 다진 고기 소가 들어간 고소한 빵", "price": "약 ¥6", "img": "https://img2.baidu.com/it/u=4224285413,1573969529&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=653", "pronun": "촨퉁 로우시안 훠샤오"}, {"name": "现磨红枣豆浆", "korean": "대추 생두유", "desc": "달콤한 대추 향이 은은하게 퍼지는 영양 두유", "price": "약 ¥5", "img": "https://img1.baidu.com/it/u=1958906378,3504971826&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1044", "pronun": "시안모 훙자오 또우장"}], "dianping": "张颜记(所城里店)", "baidu_map": "烟台市芝罘区所城里 张颜记", "hours": "06:30 ~ 10:30 (모닝 성업)", "dianping_rating": "4.7점 (로컬 아침 1등)", "tip": "아침 7시~8시 반이 가장 갓 만든 음식이 쏟아져 나오는 골든타임입니다. 포장도 가능합니다.", "reviews": [{"user": "晨跑达人 (모닝 러너)", "text": "所城里·张颜记 (소청리 고택 조식관)에서 따뜻한 국물과 만두로 든든하게 속을 채웠어요. 가격도 너무 착하고 현지 감성 제대로입니다."}, {"user": "早餐控 (조식 러버)", "text": "갓 튀겨낸 유타오와 콩국, 그리고 맑은 수제비탕의 조합이 아침을 행복하게 만들어 줍니다."}]}, {"id": "d3_8", "name": "仁亮牛肉面 (인량 우육면 朝阳街店)", "chinese_name": "仁亮牛肉面 (朝阳街店)", "category": "진한 사골 육수 우육면 & 해장 아침", "address": "烟台市芝罘区朝阳街与大马路交汇处", "location_tip": "조양가 동쪽 도로변", "taxi_text": "师傅，请带我去：芝罘区朝阳街 仁亮牛肉面", "price": "인당 약 ¥20~35 (약 3,800~6,600원)", "rating": "4.7", "tag": "얼큰 사골 우육면 아침 해장", "main_img": "https://img0.baidu.com/it/u=1534065756,3525982501&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667", "desc": "진한 소뼈 육수에 두툼한 소고기 편육과 쫄깃한 면발을 말아내는 노포. 전날 마신 고량주를 얼큰하게 땀 흘리며 해장하기에 최적입니다.", "dishes": [{"name": "招牌红烧牛肉面", "korean": "진한 홍소 우육면", "desc": "부드러운 소고기 덩어리와 진하고 칼칼한 소뼈 육수탕면", "price": "약 ¥22", "img": "https://img1.baidu.com/it/u=340458505,2169599696&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=653", "pronun": "자오파이 훙샤오 뉴로우몐"}, {"name": "原汁清汤牛肉面", "korean": "맑은 사골 우육면", "desc": "자극적이지 않고 속을 편안하게 감싸주는 담백한 고기 국수", "price": "약 ¥20", "img": "https://img0.baidu.com/it/u=829608271,3458596428&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1044", "pronun": "위안즈 칭탕 뉴로우몐"}, {"name": "酱香牛肉切盘", "korean": "수육 소고기 편육", "desc": "마늘 간장에 찍어먹는 담백한 소고기 수육 한 접시", "price": "약 ¥35", "img": "https://img0.baidu.com/it/u=3738394943,3699613343&fm=253&fmt=auto&app=138&f=JPEG?w=749&h=500", "pronun": "지앙샹 뉴로우 치에판"}], "dianping": "仁亮牛肉面(朝阳街店)", "baidu_map": "烟台市芝罘区朝阳街 仁亮牛肉面", "hours": "06:30 ~ 10:30 (모닝 성업)", "dianping_rating": "4.7점 (로컬 아침 1등)", "tip": "아침 7시~8시 반이 가장 갓 만든 음식이 쏟아져 나오는 골든타임입니다. 포장도 가능합니다.", "reviews": [{"user": "晨跑达人 (모닝 러너)", "text": "仁亮牛肉面 (인량 우육면 朝阳街店)에서 따뜻한 국물과 만두로 든든하게 속을 채웠어요. 가격도 너무 착하고 현지 감성 제대로입니다."}, {"user": "早餐控 (조식 러버)", "text": "갓 튀겨낸 유타오와 콩국, 그리고 맑은 수제비탕의 조합이 아침을 행복하게 만들어 줍니다."}]}, {"id": "d3_9", "name": "南洪街·传统老豆腐脑 (남홍가 노포)", "chinese_name": "南洪街老字号豆腐脑", "category": "몽글몽글 순두부 & 갓 튀긴 꽈배기", "address": "烟台市芝罘区南洪街早市 입구", "location_tip": "남홍가 아침 조식 거리", "taxi_text": "师傅，请带我去：芝罘区南洪街 传统豆腐脑", "price": "인당 약 ¥10~18 (약 1,900~3,400원)", "rating": "4.8", "tag": "현지인 줄서는 10위안의 행복", "main_img": "https://img1.baidu.com/it/u=1169031364,3061361793&fm=253&fmt=auto&app=138&f=JPEG?w=687&h=500", "desc": "연태 주민들이 출근길에 그릇째 들이켜는 전통 순두부탕(豆腐脑). 짭조름한 버섯 간장 소스와 고추기름, 바삭한 유타오의 조합이 아침을 든든하게 합니다.", "dishes": [{"name": "秘制卤汁豆腐脑", "korean": "버섯간장 소스 순두부탕", "desc": "부드러운 온순두부에 감칠맛 넘치는 전분 소스와 파, 고수를 얹은 탕", "price": "약 ¥6", "img": "https://img1.baidu.com/it/u=1145610810,681598759&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=653", "pronun": "미즈 루즈 더우푸나오"}, {"name": "现炸大油条", "korean": "특대 황금 유타오", "desc": "순두부 국물에 푹 찍어 먹으면 환상적인 바삭 튀김빵", "price": "약 ¥3", "img": "https://img2.baidu.com/it/u=627316814,174996295&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1067", "pronun": "시안자 다 요우탸오"}, {"name": "五香茶叶蛋", "korean": "오향 한방 간장달걀", "desc": "찻잎과 한약재로 푹 삶아낸 향긋한 아침 달걀", "price": "약 ¥2", "img": "https://img0.baidu.com/it/u=351779632,1136619139&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500", "pronun": "우샹 차예단"}], "dianping": "南洪街老字号豆腐脑", "baidu_map": "烟台市芝罘区南洪街 豆腐脑", "hours": "06:30 ~ 10:30 (모닝 성업)", "dianping_rating": "4.8점 (로컬 아침 1등)", "tip": "아침 7시~8시 반이 가장 갓 만든 음식이 쏟아져 나오는 골든타임입니다. 포장도 가능합니다.", "reviews": [{"user": "晨跑达人 (모닝 러너)", "text": "南洪街·传统老豆腐脑 (남홍가 노포)에서 따뜻한 국물과 만두로 든든하게 속을 채웠어요. 가격도 너무 착하고 현지 감성 제대로입니다."}, {"user": "早餐控 (조식 러버)", "text": "갓 튀겨낸 유타오와 콩국, 그리고 맑은 수제비탕의 조합이 아침을 행복하게 만들어 줍니다."}]}, {"id": "d3_10", "name": "漫咖啡 (Maan Coffee 조양가 오션뷰점)", "chinese_name": "漫咖啡 (朝阳街店)", "category": "빈티지 대형 브런치 & 와플 카페", "address": "烟台市芝罘区朝阳街北段88号", "location_tip": "조양가 북쪽 해변 바로 앞", "taxi_text": "师傅，请带我去：芝罘区朝阳街 漫咖啡", "price": "인당 약 ¥40~65 (약 7,600~12,000원)", "rating": "4.8", "tag": "바다 조망 대형 브런치 카페", "main_img": "https://img0.baidu.com/it/u=3216950487,239223622&fm=253&fmt=auto&app=138&f=PNG?w=500&h=662", "desc": "탁 트인 2층 테라스에서 바다를 조망할 수 있는 유럽풍 대형 카페. 곰인형 번호표와 함께 나오는 푸짐한 브런치 플레이트와 과일 와플이 인기입니다.", "dishes": [{"name": "新鲜草莓冰淇淋华夫饼", "korean": "딸기 아이스크림 와플", "desc": "갓 구운 바삭한 벨기에 와플 위에 신선한 과일과 아이스크림을 듬뿍", "price": "약 ¥48", "img": "https://img2.baidu.com/it/u=1280065739,1351604777&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1067", "pronun": "신시안 차오메이 빙치린 화푸빙"}, {"name": "美式经典早午餐", "korean": "아메리칸 브런치 플레이트", "desc": "소시지, 베이컨, 스크램블 에그, 토스트가 포함된 든든한 아침 한접시", "price": "약 ¥55", "img": "https://img0.baidu.com/it/u=3216950487,239223622&fm=253&fmt=auto&app=138&f=PNG?w=500&h=662", "pronun": "메이스 징디안 자오우찬"}, {"name": "焦糖玛奇朵", "korean": "달콤한 카라멜 마키아토", "desc": "달콤한 카라멜 드리즐과 부드러운 우유 거품 에스프레소", "price": "약 ¥36", "img": "https://img1.baidu.com/it/u=1898384729,831659939&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500", "pronun": "지아오탕 마치둬"}], "dianping": "漫咖啡(朝阳街店)", "baidu_map": "烟台市芝罘区朝阳街 漫咖啡", "hours": "06:30 ~ 10:30 (모닝 성업)", "dianping_rating": "4.8점 (로컬 아침 1등)", "tip": "아침 7시~8시 반이 가장 갓 만든 음식이 쏟아져 나오는 골든타임입니다. 포장도 가능합니다.", "reviews": [{"user": "晨跑达人 (모닝 러너)", "text": "漫咖啡 (Maan Coffee 조양가 오션뷰점)에서 따뜻한 국물과 만두로 든든하게 속을 채웠어요. 가격도 너무 착하고 현지 감성 제대로입니다."}, {"user": "早餐控 (조식 러버)", "text": "갓 튀겨낸 유타오와 콩국, 그리고 맑은 수제비탕의 조합이 아침을 행복하게 만들어 줍니다."}]}]};
+        const romanticSpotsData = [{"id": "date_1", "name": "조양가 근대 유럽풍 거리", "chinese_name": "朝阳街", "pronun": "차오양지에", "category": "💑 밤산책 & 감성 펍", "img": "https://img0.baidu.com/it/u=2891965706,4196144577&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500", "desc": "100년 전 개항기 서양식 근대 건축물이 보존된 유럽풍 감성 거리입니다. 밤 7시가 되면 따뜻한 낭만 조명이 켜지며 분위기 있는 와인바, 테라스 펍, 카페가 즐비합니다. 식사 후 손잡고 걷기 최고의 코스!", "tip": "저녁 식사 후 슬슬 걸으며 사진 찍기 좋고, 야외 테라스에서 칵테일이나 옌타이 수제맥주 한 잔 하기에 환상적입니다.", "best_time": "일몰 직후 ~ 밤 10시", "address": "山东省烟台市芝罘区朝阳街", "taxi_text": "师傅，请带我去朝阳街：山东省烟台市芝罘区朝阳街", "baidu_map": "烟台朝阳街"}, {"id": "date_2", "name": "월량만 (달 조형물 & 사랑의 맹세)", "chinese_name": "月亮湾", "pronun": "위에량완", "category": "🌅 바다 노을 & 인증샷", "img": "https://img2.baidu.com/it/u=3883395728,2904838634&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500", "desc": "바다 한가운데 푸른빛으로 솟아있는 거대한 반달 조형물이 있는 연인들의 성지입니다. 연인들이 손을 잡고 달 조형물 앞에서 영원한 사랑을 약속하며 난간에 사랑의 자물쇠를 거는 곳입니다.", "tip": "노을 질 때 바다 수평선과 반달 조형물 사이에 서서 역광 실루엣 사진을 찍으면 평생 소장할 커플 사진이 나옵니다!", "best_time": "오후 5시 ~ 일몰 시간 (골든아워)", "address": "山东省烟台市芝罘区滨海北路月亮湾", "taxi_text": "师傅，请带我去月亮湾：山东省烟台市芝罘区滨海北路月亮湾", "baidu_map": "烟台月亮湾"}, {"id": "date_3", "name": "옌타이산 공원 & 백년 영사관 언덕", "chinese_name": "烟台山公园", "pronun": "옌타이산 공위안", "category": "🌲 숲길 & 바다 파노라마", "img": "https://img1.baidu.com/it/u=1864115160,2503914838&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500", "desc": "삼면이 푸른 바다로 둘러싸인 아담한 언덕 공원으로, 1900년대 영국, 미국, 프랑스 등 6개국 영사관 붉은 벽돌 건물들이 숲속에 그림처럼 남아있습니다. 정상 등대 전망대에서 바라보는 옌타이 바다는 절경입니다.", "tip": "숲길 산책로가 시원하고 이국적인 서양식 건물 배경으로 감성 스냅 사진 찍기 최고입니다. 등대 엘리베이터 타고 꼭대기 뷰 감상 추천!", "best_time": "오전 9시 ~ 11시 또는 오후 3시 ~ 5시", "address": "山东省烟台市芝罘区历新路7号", "taxi_text": "师傅，请带我去烟台山公园：山东省烟台市芝罘区历新路7号", "baidu_map": "烟台山公园"}, {"id": "date_4", "name": "해창 어인부두 (유럽풍 해변 부둣가)", "chinese_name": "海昌渔人码头", "pronun": "하이창 위런마터우", "category": "🌊 이국적 부두 & 바다 데크", "img": "https://img2.baidu.com/it/u=2233261685,3221919421&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500", "desc": "북미와 유럽의 작은 항구 도시를 통째로 옮겨놓은 듯한 알록달록한 건축물과 바다 위로 시원하게 뻗은 목조 데크 산책로가 인상적인 곳입니다. 바닷바람을 맞으며 산책하기 좋습니다.", "tip": "목조 데크 끝에서 바다를 배경으로 서서 사진을 찍으면 해외 휴양지에 온 느낌이 물씬 납니다. 해질녘 조명이 켜질 때가 가장 아름답습니다.", "best_time": "오후 4시 30분 ~ 7시", "address": "山东省烟台市莱山区滨海中路45号", "taxi_text": "师傅，请带我去海昌渔人码头：山东省烟台市莱山区滨海中路45号", "baidu_map": "烟台海昌渔人码头"}, {"id": "date_5", "name": "빈하이광장 & 옌타이 잔교", "chinese_name": "滨海广场 / 烟台栈桥", "pronun": "빈하이 광창 / 옌타이 잔차오", "category": "✨ 도심 야경 & 바다 잔교", "img": "https://img1.baidu.com/it/u=4191316279,796677931&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500", "desc": "옌타이 도심 해변을 따라 조성된 넓은 광장과 바다 한가운데로 길게 뻗은 잔교입니다. 밤이 되면 맞은편 도심 빌딩들의 미디어 파사드 조명 쇼가 바다에 반영되어 로맨틱한 도심 야경을 선사합니다.", "tip": "편의점에서 칭다오 캔맥주나 음료수를 사들고 잔교 끝 정자까지 손잡고 걸어가 바다 야경을 바라보며 도란도란 이야기 나누기 좋습니다.", "best_time": "밤 7시 30분 ~ 9시 30분 (빌딩 조명 쇼)", "address": "山东省烟台市芝罘区大马路与海关街交叉口", "taxi_text": "师傅，请带我去滨海广场：山东省烟台市芝罘区大马路与海关街交叉口", "baidu_map": "烟台滨海广场"}, {"id": "date_6", "name": "양마도 환도 해안도로 (동방의 몰디브)", "chinese_name": "养马岛环岛路", "pronun": "양마따오 환따오루", "category": "🛵 에메랄드 바다 드라이브", "img": "https://img0.baidu.com/it/u=4045543787,2723706485&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500", "desc": "수심이 얕고 바닥이 훤히 비칠 정도로 맑은 에메랄드빛 바다를 품은 섬입니다. 섬을 둘러싼 해안 절벽 도로(환도루)는 차를 타거나 2인용 전동 스쿠터를 빌려 달릴 때 가슴이 뻥 뚫리는 환상적인 코스입니다.", "tip": "양마도 천마광장 근처에서 2인용 헬멧과 전동 스쿠터를 대여(시간당 30~50위안)해 둘이서 바닷바람 맞으며 해안도로를 달려보세요. 여자친구가 가장 행복해할 1순위 액티비티입니다!", "best_time": "맑은 날 오전 11시 ~ 오후 3시 (바다 색이 가장 영롱함)", "address": "山东省烟台市牟平区养马岛天马广场旁", "taxi_text": "师傅，请带我去养马岛天马广场：山东省烟台市牟平区养马岛天马广场", "baidu_map": "养马岛天马广场"}];
+
+        let currentActiveTab = 'all';
+        let currentOrderChineseText = '';
+        let currentTaxiAddressText = '';
+
+        function closeLoveModal() {
+            document.getElementById('loveModal').classList.add('hidden');
+        }
+
+        function openLoveModal() {
+            document.getElementById('loveModal').classList.remove('hidden');
+        }
+
+        // 찜(Favorites) 기능 - LocalStorage 연동
+        function getFavorites() {
+            try {
+                return JSON.parse(localStorage.getItem('yantai_favorites') || '[]');
+            } catch(e) {
+                return [];
+            }
+        }
+
+        function isFavorite(id) {
+            return getFavorites().includes(id);
+        }
+
+        function toggleFavorite(id, event) {
+            if (event) event.stopPropagation();
+            let favs = getFavorites();
+            if (favs.includes(id)) {
+                favs = favs.filter(item => item !== id);
+                showToast('찜 목록에서 제외되었습니다.');
+            } else {
+                favs.push(id);
+                showToast('❤️ 둘만의 찜 목록에 저장되었습니다!');
+            }
+            localStorage.setItem('yantai_favorites', JSON.stringify(favs));
+            updateFavCount();
+            renderAll();
+            if (currentActiveTab === 'fav') {
+                filterFavoritesTab();
+            }
+        }
+
+        function updateFavCount() {
+            const count = getFavorites().length;
+            const badge = document.getElementById('favCountBadge');
+            if (badge) badge.innerText = count;
+        }
+
+        // TTS 중국어 음성 재생 함수 (Web Speech API)
+        function speakChinese(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                // 괄호 및 특수문자 제거 후 순수 중국어만 발음
+                const cleanText = text.replace(/\[.*?\]/g, '').replace(/[🗣️💡⭐!]/g, '').trim();
+                const utterance = new SpeechSynthesisUtterance(cleanText);
+                utterance.lang = 'zh-CN';
+                utterance.rate = 0.85; // 살짝 천천히 또박또박 발음
+                window.speechSynthesis.speak(utterance);
+                showToast('🔊 중국어 음성을 재생합니다.');
+            } else {
+                showToast('이 브라우저는 음성 재생을 지원하지 않습니다.');
+            }
+        }
+
+        function speakCurrentOrderModal() {
+            speakChinese(currentOrderChineseText);
+        }
+
+        function speakCurrentTaxi() {
+            speakChinese(currentTaxiAddressText);
+        }
+
+        // 식당 카드 HTML 생성
+        function createCard(item, badgeColor, index) {
+            const baiduMapUrl = `https://map.baidu.com/search/${encodeURIComponent(item.baidu_map)}`;
+            const isFav = isFavorite(item.id);
+
+            // 대표 메뉴 3개 미리보기 뱃지 (한국어 발음 포함)
+            const previewPills = item.dishes.map(d => `
+                <div class="flex justify-between items-center py-1 border-b border-slate-100 last:border-none">
+                    <div class="flex items-center gap-1.5 overflow-hidden">
+                        <span class="text-[11px] font-bold text-slate-800 truncate">${d.name}</span>
+                        <span class="text-[10px] font-black text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded shrink-0">${d.pronun}</span>
+                    </div>
+                    <span class="text-[10px] font-black text-amber-700 shrink-0 ml-1">${d.price}</span>
+                </div>
+            `).join('');
+
+            return `
+                <div class="rest-card bg-white rounded-3xl p-4 shadow-sm border border-slate-200 space-y-3 card-clickable" 
+                     data-id="${item.id}"
+                     data-name="${item.name} ${item.chinese_name} ${item.dishes.map(d=>d.name + ' ' + d.chinese).join(' ')}"
+                     onclick="openDishModalById('${item.id}')">
+                    
+                    <!-- 식당 메인 썸네일 & 배지 -->
+                    <div class="relative w-full h-44 rounded-2xl overflow-hidden img-box">
+                        <img src="${item.main_img}" alt="${item.name}" class="w-full h-full object-cover" loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+                        
+                        <span class="absolute top-2.5 left-2.5 text-[10px] font-extrabold bg-${badgeColor}-600 text-white px-2.5 py-1 rounded-full shadow-xs">
+                            ${item.category}
+                        </span>
+
+                        <!-- 하트 찜 버튼 -->
+                        <button onclick="toggleFavorite('${item.id}', event)" 
+                                class="absolute top-2.5 right-16 w-8 h-8 rounded-full bg-black/60 backdrop-blur-xs flex items-center justify-center text-sm transition active:scale-125 border border-white/20">
+                            <span class="${isFav ? 'text-rose-500 scale-110' : 'text-white/80'}">${isFav ? '❤️' : '🤍'}</span>
+                        </button>
+
+                        <!-- 대중점평 실제 평점 태그 -->
+                        <span class="absolute top-2.5 right-2.5 text-[10px] font-extrabold bg-orange-600 text-white px-2 py-1 rounded-md shadow-xs">
+                            ⭐ ${item.dianping_rating.split(' ')[0]}
+                        </span>
+
+                        <div class="absolute bottom-2.5 left-3 right-3 flex justify-between items-end text-white">
+                            <div>
+                                <h3 class="text-base font-black leading-tight drop-shadow-md">${index}. ${item.name}</h3>
+                                <p class="text-xs font-bold text-amber-300">${item.chinese_name}</p>
+                            </div>
+                            <span class="text-[10px] font-extrabold bg-black/60 px-2.5 py-1 rounded-lg backdrop-blur-xs border border-white/20">
+                                ${item.price}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- 식당 설명글 -->
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        ${item.desc}
+                    </p>
+
+                    <!-- 대표 3대 메뉴 미리보기 (발음 포함) -->
+                    <div class="space-y-1 bg-slate-50 p-2.5 rounded-2xl border border-slate-200">
+                        <div class="flex justify-between items-center text-[10px] font-bold text-slate-500 px-1 pb-0.5">
+                            <span>⭐ 대표 3대 메뉴 (발음·사진)</span>
+                            <span class="text-rose-600 font-extrabold">터치해서 보기 ↗</span>
+                        </div>
+                        <div class="space-y-0.5">
+                            ${previewPills}
+                        </div>
+                    </div>
+
+                    <!-- 3대 바로가기 버튼 -->
+                    <div class="grid grid-cols-3 gap-1.5 pt-0.5 text-xs font-bold" onclick="event.stopPropagation()">
+                        <button onclick="openDishModalById('${item.id}')"
+                           class="flex items-center justify-center gap-1 bg-orange-500 hover:bg-orange-600 text-white py-2.5 rounded-xl shadow-xs transition text-[11px]">
+                            💬 찐리뷰·발음
+                        </button>
+                        <a href="${baiduMapUrl}" target="_blank" rel="noopener noreferrer"
+                           class="flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl shadow-xs transition text-[11px]">
+                            📍 바이두 지도
+                        </a>
+                        <button onclick="showTaxiModal('${item.taxi_text}', '${item.chinese_name}')"
+                           class="flex items-center justify-center gap-1 bg-slate-900 hover:bg-slate-800 text-white py-2.5 rounded-xl shadow-xs transition text-[11px]">
+                            🚕 기사님께
+                        </button>
+                    </div>
+
+                </div>
+            `;
+        }
+
+        // 로맨틱 데이트 스팟 카드 생성
+        function createRomanceCard(spot, index) {
+            const baiduMapUrl = `https://map.baidu.com/search/${encodeURIComponent(spot.baidu_map)}`;
+            return `
+                <div class="bg-white rounded-3xl p-4 shadow-sm border border-slate-200 space-y-3">
+                    <div class="relative w-full h-44 rounded-2xl overflow-hidden img-box">
+                        <img src="${spot.img}" alt="${spot.name}" class="w-full h-full object-cover" loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+                        
+                        <span class="absolute top-2.5 left-2.5 text-[10px] font-extrabold bg-rose-600 text-white px-2.5 py-1 rounded-full shadow-xs">
+                            ${spot.category}
+                        </span>
+
+                        <div class="absolute bottom-2.5 left-3 right-3 flex justify-between items-end text-white">
+                            <div>
+                                <h3 class="text-base font-black leading-tight drop-shadow-md">${index}. ${spot.name}</h3>
+                                <p class="text-xs font-bold text-amber-300">${spot.chinese_name} <span class="text-rose-300 font-normal">[${spot.pronun}]</span></p>
+                            </div>
+                            <span class="text-[10px] font-extrabold bg-black/60 px-2 py-0.5 rounded-lg border border-white/20">
+                                🕒 ${spot.best_time.split(' ')[0]}
+                            </span>
+                        </div>
+                    </div>
+
+                    <p class="text-xs text-slate-600 leading-relaxed">${spot.desc}</p>
+
+                    <div class="bg-rose-50/70 border border-rose-200/80 rounded-2xl p-3 space-y-1.5 text-xs">
+                        <p class="font-extrabold text-rose-800 flex items-center gap-1">
+                            <span>📸</span> 커플 인생샷 & 데이트 꿀팁:
+                        </p>
+                        <p class="text-slate-700 text-[11px] leading-relaxed">${spot.tip}</p>
+                        <p class="text-[10px] text-slate-500"><strong>추천 방문 시간:</strong> ${spot.best_time}</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 pt-0.5 text-xs font-bold">
+                        <a href="${baiduMapUrl}" target="_blank" rel="noopener noreferrer"
+                           class="flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl shadow-xs transition text-[11px]">
+                            📍 바이두 지도로 보기
+                        </a>
+                        <button onclick="showTaxiModal('${spot.taxi_text}', '${spot.chinese_name}')"
+                           class="flex items-center justify-center gap-1 bg-slate-900 hover:bg-slate-800 text-white py-2.5 rounded-xl shadow-xs transition text-[11px]">
+                            🚕 기사님께 보여주기
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 전체 40곳 & 데이트 스팟 렌더링
+        function renderAll() {
+            document.getElementById('list-day1').innerHTML = restaurantsData.day1_dinner.map((item, idx) => createCard(item, 'amber', idx + 1)).join('');
+            document.getElementById('list-day2-lunch').innerHTML = restaurantsData.day2_lunch.map((item, idx) => createCard(item, 'emerald', idx + 1)).join('');
+            document.getElementById('list-day2-dinner').innerHTML = restaurantsData.day2_dinner.map((item, idx) => createCard(item, 'purple', idx + 1)).join('');
+            document.getElementById('list-day3-breakfast').innerHTML = restaurantsData.day3_breakfast.map((item, idx) => createCard(item, 'indigo', idx + 1)).join('');
+
+            // 데이트 스팟 렌더링
+            document.getElementById('romanceSpotsContainer').innerHTML = romanticSpotsData.map((spot, idx) => createRomanceCard(spot, idx + 1)).join('');
+            updateFavCount();
+        }
+
+        renderAll();
+
+        // 찜 탭 전용 필터링
+        function filterFavoritesTab() {
+            const favIds = getFavorites();
+            const emptyNotice = document.getElementById('favEmptyNotice');
+            let matchCount = 0;
+
+            document.querySelectorAll('.rest-card').forEach(card => {
+                const id = card.getAttribute('data-id');
+                if (favIds.includes(id)) {
+                    card.style.display = 'block';
+                    matchCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (matchCount === 0) {
+                emptyNotice.classList.remove('hidden');
+            } else {
+                emptyNotice.classList.add('hidden');
+            }
+        }
+
+        // 식당 ID로 상세 모달 열기 (대표 메뉴 3개 + 실물 사진 + 한국어 발음 + 대중점평 찐리뷰)
+        function openDishModalById(id) {
+            let found = null;
+            for (const category in restaurantsData) {
+                const match = restaurantsData[category].find(r => r.id === id);
+                if (match) {
+                    found = match;
+                    break;
+                }
+            }
+            if (!found) return;
+
+            document.getElementById('popCategory').innerText = found.category;
+            document.getElementById('popPrice').innerText = found.price;
+            document.getElementById('popRestName').innerText = found.name;
+            document.getElementById('popChineseName').innerText = found.chinese_name;
+            document.getElementById('popAddress').innerText = found.address + ' (' + found.location_tip + ')';
+            
+            // 대중점평 실제 정보
+            document.getElementById('popRating').innerText = `⭐ ${found.dianping_rating}`;
+            document.getElementById('popHours').innerText = found.hours;
+            document.getElementById('popTip').innerText = found.tip;
+
+            document.getElementById('popTaxiBtn').onclick = () => {
+                showTaxiModal(found.taxi_text, found.chinese_name);
+            };
+
+            document.getElementById('popBaiduBtn').href = `https://map.baidu.com/search/${encodeURIComponent(found.baidu_map)}`;
+
+            // 대표 메뉴 3개 렌더링 (한국어 발음 + 큰글씨 주문 화면 연결 + 음성 듣기)
+            const container = document.getElementById('popDishesContainer');
+            container.innerHTML = found.dishes.map((d, index) => `
+                <div class="bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden shadow-xs space-y-2.5 p-3">
+                    <div class="w-full h-48 rounded-xl overflow-hidden relative img-box">
+                        <img src="${d.img}" alt="${d.name}" class="w-full h-full object-cover" onerror="this.src='${found.main_img}'">
+                        <span class="absolute top-2 left-2 bg-black/70 text-amber-400 font-black text-[10px] px-2.5 py-1 rounded-md backdrop-blur-xs">
+                            추천메뉴 ${index + 1}
+                        </span>
+                        <span class="absolute top-2 right-2 bg-rose-600 text-white font-extrabold text-[10px] px-2 py-1 rounded-md shadow-xs">
+                            ${d.price}
+                        </span>
+                    </div>
+
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h5 class="text-sm font-black text-slate-900">${d.name}</h5>
+                                <p class="text-xs font-extrabold text-amber-700">${d.chinese}</p>
+                            </div>
+                            <span class="text-xs font-black text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200">
+                                🗣️ ${d.pronun}
+                            </span>
+                        </div>
+                        <p class="text-[11px] text-slate-600 leading-relaxed pt-1">
+                            ${d.desc}
+                        </p>
+                    </div>
+
+                    <!-- 원터치 주문 및 발음 버튼 -->
+                    <div class="grid grid-cols-4 gap-1.5 pt-1">
+                        <button onclick="speakChinese('${d.chinese}')"
+                                class="col-span-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-2 rounded-xl text-[11px] border border-indigo-200 flex items-center justify-center gap-1">
+                            <span>🔊</span> 발음
+                        </button>
+                        <button onclick="showPronunOrderModal('我要一份：${d.chinese}', '${d.pronun}', '${d.name}')" 
+                                class="col-span-3 bg-rose-600 hover:bg-rose-700 text-white font-black py-2 rounded-xl text-center text-xs shadow-xs transition flex items-center justify-center gap-1">
+                            <span>🗣️</span> 이 메뉴 1인분 주문하기
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('dishModal').classList.remove('hidden');
+        }
+
+        function closeDishModal() {
+            document.getElementById('dishModal').classList.add('hidden');
+        }
+
+        // 발음 주문 모달
+        function showPronunOrderModal(chineseText, pronunText, meanText) {
+            currentOrderChineseText = chineseText;
+            document.getElementById('modalOrderChinese').innerText = chineseText;
+            document.getElementById('modalOrderKoreanMean').innerText = meanText ? '메뉴: ' + meanText : '';
+            document.getElementById('modalOrderPronun').innerText = '"' + pronunText + '"';
+            document.getElementById('pronunOrderModal').classList.remove('hidden');
+        }
+
+        function closePronunOrderModal() {
+            document.getElementById('pronunOrderModal').classList.add('hidden');
+        }
+
+        function copyCurrentOrderText() {
+            copyText(currentOrderChineseText);
+        }
+
+        // 탭 전환
+        function switchTab(tab) {
+            currentActiveTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.getElementById(`tab-${tab}`);
+            if (activeBtn) activeBtn.classList.add('active');
+
+            const secRomance = document.getElementById('sec-romance');
+            const secDessert = document.getElementById('sec-dessert');
+            const secLiquor = document.getElementById('sec-liquor');
+            const secDay1 = document.getElementById('sec-day1');
+            const secDay2Lunch = document.getElementById('sec-day2-lunch');
+            const secDay2Dinner = document.getElementById('sec-day2-dinner');
+            const secDay3 = document.getElementById('sec-day3');
+            const emptyNotice = document.getElementById('favEmptyNotice');
+
+            emptyNotice.classList.add('hidden');
+
+            if (tab === 'all') {
+                secRomance.style.display = 'block';
+                secDessert.style.display = 'block';
+                secLiquor.style.display = 'block';
+                secDay1.style.display = 'block';
+                secDay2Lunch.style.display = 'block';
+                secDay2Dinner.style.display = 'block';
+                secDay3.style.display = 'block';
+                document.querySelectorAll('.rest-card').forEach(card => card.style.display = 'block');
+            } else if (tab === 'fav') {
+                secRomance.style.display = 'none';
+                secDessert.style.display = 'none';
+                secLiquor.style.display = 'none';
+                secDay1.style.display = 'block';
+                secDay2Lunch.style.display = 'block';
+                secDay2Dinner.style.display = 'block';
+                secDay3.style.display = 'block';
+                filterFavoritesTab();
+            } else if (tab === 'romance') {
+                secRomance.style.display = 'block';
+                secDessert.style.display = 'none';
+                secLiquor.style.display = 'none';
+                secDay1.style.display = 'none';
+                secDay2Lunch.style.display = 'none';
+                secDay2Dinner.style.display = 'none';
+                secDay3.style.display = 'none';
+            } else if (tab === 'dessert') {
+                secRomance.style.display = 'none';
+                secDessert.style.display = 'block';
+                secLiquor.style.display = 'none';
+                secDay1.style.display = 'none';
+                secDay2Lunch.style.display = 'none';
+                secDay2Dinner.style.display = 'none';
+                secDay3.style.display = 'none';
+            } else if (tab === 'liquor') {
+                secRomance.style.display = 'none';
+                secDessert.style.display = 'none';
+                secLiquor.style.display = 'block';
+                secDay1.style.display = 'none';
+                secDay2Lunch.style.display = 'none';
+                secDay2Dinner.style.display = 'none';
+                secDay3.style.display = 'none';
+            } else if (tab === 'day1') {
+                secRomance.style.display = 'none';
+                secDessert.style.display = 'none';
+                secLiquor.style.display = 'none';
+                secDay1.style.display = 'block';
+                secDay2Lunch.style.display = 'none';
+                secDay2Dinner.style.display = 'none';
+                secDay3.style.display = 'none';
+                document.querySelectorAll('#list-day1 .rest-card').forEach(card => card.style.display = 'block');
+            } else if (tab === 'day2_lunch') {
+                secRomance.style.display = 'none';
+                secDessert.style.display = 'none';
+                secLiquor.style.display = 'none';
+                secDay1.style.display = 'none';
+                secDay2Lunch.style.display = 'block';
+                secDay2Dinner.style.display = 'none';
+                secDay3.style.display = 'none';
+                document.querySelectorAll('#list-day2-lunch .rest-card').forEach(card => card.style.display = 'block');
+            } else if (tab === 'day2_dinner') {
+                secRomance.style.display = 'none';
+                secDessert.style.display = 'none';
+                secLiquor.style.display = 'none';
+                secDay1.style.display = 'none';
+                secDay2Lunch.style.display = 'none';
+                secDay2Dinner.style.display = 'block';
+                secDay3.style.display = 'none';
+                document.querySelectorAll('#list-day2-dinner .rest-card').forEach(card => card.style.display = 'block');
+            } else if (tab === 'day3') {
+                secRomance.style.display = 'none';
+                secDessert.style.display = 'none';
+                secLiquor.style.display = 'none';
+                secDay1.style.display = 'none';
+                secDay2Lunch.style.display = 'none';
+                secDay2Dinner.style.display = 'none';
+                secDay3.style.display = 'block';
+                document.querySelectorAll('#list-day3-breakfast .rest-card').forEach(card => card.style.display = 'block');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 검색 기능
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const clearBtn = document.getElementById('clearSearchBtn');
+            const notice = document.getElementById('searchNotice');
+            const countElem = document.getElementById('searchCount');
+
+            if (query === '') {
+                clearBtn.classList.add('hidden');
+                notice.classList.add('hidden');
+                document.querySelectorAll('.rest-card').forEach(card => card.style.display = 'block');
+                return;
+            }
+
+            clearBtn.classList.remove('hidden');
+            let matchCount = 0;
+
+            document.querySelectorAll('.rest-card').forEach(card => {
+                const text = card.getAttribute('data-name').toLowerCase();
+                if (text.includes(query)) {
+                    card.style.display = 'block';
+                    matchCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            switchTab('all');
+            notice.classList.remove('hidden');
+            countElem.innerText = matchCount;
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            handleSearch();
+        }
+
+        // 기사님 모달
+        function showTaxiModal(text, title) {
+            currentTaxiAddressText = text;
+            document.getElementById('modalTaxiTitle').innerText = title;
+            document.getElementById('modalTaxiContent').innerText = text;
+            document.getElementById('taxiModal').classList.remove('hidden');
+        }
+
+        function closeTaxiModal() {
+            document.getElementById('taxiModal').classList.add('hidden');
+        }
+
+        function copyTaxiAddress() {
+            copyText(currentTaxiAddressText);
+            showToast('기사님 주소가 복사되었습니다!');
+        }
+
+        function copyText(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text);
+            } else {
+                const tempInput = document.createElement("input");
+                tempInput.value = text;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempInput);
+            }
+            showToast('복사되었습니다: ' + text);
+        }
+
+        function shareLink() {
+            copyText(window.location.href);
+            showToast('가이드 주소가 복사되었습니다!');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById("toast");
+            toast.innerText = msg;
+            toast.style.opacity = "1";
+            setTimeout(() => {
+                toast.style.opacity = "0";
+            }, 2200);
+        }
+    </script>
+</body>
+</html>
