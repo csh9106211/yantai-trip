@@ -82,15 +82,14 @@
 
             <!-- 상단 탭 네비게이션 (가로 스크롤) -->
             <div class="flex gap-1.5 mt-2.5 overflow-x-auto pb-1 no-scrollbar text-xs">
-                <button onclick="switchTab('all')" id="tab-all" class="tab-btn active px-3.5 py-1.5 rounded-full whitespace-nowrap transition">전체 (40곳)</button>
+                <button onclick="switchTab('all')" id="tab-all" class="tab-btn active px-3.5 py-1.5 rounded-full whitespace-nowrap transition">📅 전체 일정 (1~3일차)</button>
+                <button onclick="switchTab('day1')" id="tab-day1" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition">토 (Day 1 도심·해산물)</button>
+                <button onclick="switchTab('day2')" id="tab-day2" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition">일 (Day 2 양마도·양꼬치)</button>
+                <button onclick="switchTab('day3')" id="tab-day3" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition">월 (Day 3 조식·연태산·와인)</button>
                 <button onclick="switchTab('fav')" id="tab-fav" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition text-rose-600">❤️ 내 찜 목록 (<span id="favCountBadge">0</span>)</button>
                 <button onclick="switchTab('romance')" id="tab-romance" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition">💑 데이트 & 야경 (TOP 6)</button>
                 <button onclick="switchTab('dessert')" id="tab-dessert" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition">🧋 밀크티 & 과일 & 생존팁</button>
                 <button onclick="switchTab('liquor')" id="tab-liquor" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition">🗣️ 중국어 발음 & 술 주문</button>
-                <button onclick="switchTab('day1')" id="tab-day1" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition">토 저녁 (해산물 10곳)</button>
-                <button onclick="switchTab('day2_lunch')" id="tab-day2_lunch" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition">일 점심 (양마도 10곳)</button>
-                <button onclick="switchTab('day2_dinner')" id="tab-day2_dinner" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition">일 저녁 (양꼬치 10곳)</button>
-                <button onclick="switchTab('day3')" id="tab-day3" class="tab-btn px-3 py-1.5 rounded-full whitespace-nowrap transition">월 아침 (조식 10곳)</button>
             </div>
         </div>
     </header>
@@ -115,6 +114,65 @@
                 전체 맛집 둘러보기
             </button>
         </div>
+
+        <!-- 📅 [SPECIAL] 2박 3일 전체 일정 마스터 타임테이블 (Overview) -->
+        <section id="sec-itinerary-overview" class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200 space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2">
+                    <span class="bg-slate-900 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full tracking-wide">MASTER PLAN</span>
+                    <h2 class="text-base font-black text-slate-900">📅 2박 3일 전체 여행 타임테이블</h2>
+                </div>
+                <span class="text-[10px] font-bold text-slate-400">시간순 코스</span>
+            </div>
+
+            <p class="text-xs text-slate-600 leading-relaxed">
+                오빠가 수진이와 함께할 2박 3일 전체 여행 일정을 시간대별로 정리했습니다. 아래 카드를 터치하면 해당 일차의 상세 일정과 검증 맛집으로 바로 이동합니다!
+            </p>
+
+            <!-- Day 1 요약 카드 -->
+            <div class="bg-amber-50/70 rounded-2xl p-4 border border-amber-200/80 space-y-2 cursor-pointer hover:bg-amber-100/60 active:scale-98 transition shadow-xs" onclick="switchTab('day1')">
+                <div class="flex justify-between items-center">
+                    <span class="bg-amber-600 text-white text-xs font-black px-2.5 py-0.5 rounded-md">1일차 · 토요일</span>
+                    <span class="text-xs font-extrabold text-amber-800 flex items-center gap-0.5">상세 일정 보기 ↗</span>
+                </div>
+                <h4 class="text-sm font-black text-slate-900">도착 & 시내 체크인 & 10대 해산물 만찬 & 조양가 야경</h4>
+                <div class="space-y-1 text-xs text-slate-700 pt-1 border-t border-amber-200/60">
+                    <p>• <strong>15:15 ~ 17:30:</strong> 펑라이 공항 도착 ➔ 택시 시내 이동(40분) ➔ 호텔 체크인</p>
+                    <p>• <strong>17:30 ~ 19:30:</strong> <strong>연태 백년 전통 10대 해산물·삼치만두 만찬</strong> (10곳)</p>
+                    <p>• <strong>19:30 ~ 22:30:</strong> 완다플라자(금가 야시장) & 조양가 유럽풍 거리·소청리 밤산책</p>
+                </div>
+            </div>
+
+            <!-- Day 2 요약 카드 -->
+            <div class="bg-emerald-50/70 rounded-2xl p-4 border border-emerald-200/80 space-y-2 cursor-pointer hover:bg-emerald-100/60 active:scale-98 transition shadow-xs" onclick="switchTab('day2')">
+                <div class="flex justify-between items-center">
+                    <span class="bg-emerald-600 text-white text-xs font-black px-2.5 py-0.5 rounded-md">2일차 · 일요일</span>
+                    <span class="text-xs font-extrabold text-emerald-800 flex items-center gap-0.5">상세 일정 보기 ↗</span>
+                </div>
+                <h4 class="text-sm font-black text-slate-900">양마도 에메랄드 스쿠터 질주 & 어촌 밥상 & 숯불 양꼬치</h4>
+                <div class="space-y-1 text-xs text-slate-700 pt-1 border-t border-emerald-200/60">
+                    <p>• <strong>09:00 ~ 12:00:</strong> 택시 양마도 출발(45분) ➔ 2인 전동 스쿠터 대여 ➔ 에메랄드 해안도로</p>
+                    <p>• <strong>12:00 ~ 14:30:</strong> <strong>양마도 섬 안 10대 어촌 해물 밥상</strong> (성게볶음밥·활어회 10곳)</p>
+                    <p>• <strong>14:30 ~ 17:00:</strong> 칠채 산책로 & 노을 카페 스냅 사진</p>
+                    <p>• <strong>17:30 ~ 21:30:</strong> 시내 복귀 ➔ <strong>10대 숯불 양꼬치 & 야시장 BBQ 만찬</strong> + 칭다오 생맥주</p>
+                </div>
+            </div>
+
+            <!-- Day 3 요약 카드 -->
+            <div class="bg-indigo-50/70 rounded-2xl p-4 border border-indigo-200/80 space-y-2 cursor-pointer hover:bg-indigo-100/60 active:scale-98 transition shadow-xs" onclick="switchTab('day3')">
+                <div class="flex justify-between items-center">
+                    <span class="bg-indigo-600 text-white text-xs font-black px-2.5 py-0.5 rounded-md">3일차 · 월요일</span>
+                    <span class="text-xs font-extrabold text-indigo-800 flex items-center gap-0.5">상세 일정 보기 ↗</span>
+                </div>
+                <h4 class="text-sm font-black text-slate-900">30년 전통 조식 & 연태산 등대 산책 & 장위 와인박물관</h4>
+                <div class="space-y-1 text-xs text-slate-700 pt-1 border-t border-indigo-200/60">
+                    <p>• <strong>08:00 ~ 09:30:</strong> <strong>30년 전통 10대 로컬 조식</strong> (뜨끈한 훈툰·샤오롱바오 10곳)</p>
+                    <p>• <strong>09:30 ~ 11:30:</strong> 옌타이산 공원 (바다 앞 하얀 등대 & 6개국 영사관 숲길 산책)</p>
+                    <p>• <strong>11:30 ~ 13:00:</strong> 장위 와인 문화 박물관 (100년 지하 와인 저장고 & 시음)</p>
+                    <p>• <strong>13:00 ~:</strong> 호텔 체크아웃 ➔ 펑라이 공항 이동 & 출국 귀국</p>
+                </div>
+            </div>
+        </section>
 
         <!-- 💑 [NEW] 옌타이 로맨틱 데이트 & 야경 스팟 TOP 6 -->
         <section id="sec-romance" class="space-y-4">
@@ -477,52 +535,156 @@
             </div>
         </section>
 
-        <!-- 1. Day 1 저녁: 해산물/교자 (10곳) -->
+        <!-- 📅 DAY 1 SECTION (토요일: 공항 도착 & 도심 향토 미식 투어 & 조양가 야경) -->
         <section id="sec-day1" class="space-y-4">
             <div class="flex items-center gap-2 pt-1">
-                <span class="bg-amber-600 text-white text-xs font-black px-2 py-0.5 rounded">토요일 저녁</span>
-                <h2 class="text-xl font-extrabold text-slate-900">🦐 1일차 저녁: 연태 해산물 & 만두 (10곳)</h2>
+                <span class="bg-amber-600 text-white text-xs font-black px-2.5 py-0.5 rounded">DAY 1</span>
+                <h2 class="text-xl font-extrabold text-slate-900">토요일: 도착 & 도심 향토 미식 투어</h2>
             </div>
-            <p class="text-xs text-slate-600">
-                연태에 도착하자마자 맛보는 백년 전통 해산물 요리와 전설의 삼치 만두 명가들입니다.
-            </p>
-            <div id="list-day1" class="space-y-4"></div>
+
+            <!-- 타임라인 1: 15:15 ~ 17:30 공항 도착 & 숙소 체크인 -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-2">
+                <div class="flex justify-between items-center text-xs text-amber-800 font-bold bg-amber-50 px-3 py-1.5 rounded-xl border border-amber-200">
+                    <span>⏰ 15:15 ~ 17:30</span>
+                    <span>공항 도착 & 숙소 체크인</span>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    입국 수속 후 공항 밖 택시 승차장에서 시내로 이동 (약 35~45분, 요금 약 60~75위안). 숙소에 짐을 풀고 바로 저녁 식사를 하러 이동합니다.
+                </p>
+            </div>
+
+            <!-- 타임라인 2: 17:30 ~ 19:30 토요일 저녁 맛집 10선 -->
+            <div class="space-y-2">
+                <div class="flex justify-between items-center text-xs text-amber-800 font-bold bg-amber-50 px-3 py-1.5 rounded-xl border border-amber-200">
+                    <span>⏰ 17:30 ~ 19:30 (저녁)</span>
+                    <span>연태 대표 향토 해산물 맛집 10선</span>
+                </div>
+                <p class="text-xs text-slate-500 px-1">
+                    연태에 도착하자마자 맛보는 백년 전통 해산물 요리와 전설의 삼치 만두 명가들입니다.
+                </p>
+                <div id="list-day1" class="space-y-4 pt-1"></div>
+            </div>
+
+            <!-- 타임라인 3: 19:30 ~ 22:30 완다플라자 & 조양가/소청리 야경 -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
+                <div class="flex justify-between items-center text-xs text-amber-800 font-bold bg-amber-50 px-3 py-1.5 rounded-xl border border-amber-200">
+                    <span>⏰ 19:30 ~ 22:30 (밤산책 & 야경)</span>
+                    <span>완다플라자 & 조양가/소청리 야경</span>
+                </div>
+                <div class="space-y-2 text-xs text-slate-600 leading-relaxed">
+                    <p>• <strong>완다플라자 (Wanda Plaza):</strong> 생각보다 거대한 복합 쇼핑몰. 바로 앞 <strong>금가(金街)</strong> 야시장에서 양꼬치, 지엔빙, 버블티를 즐길 수 있습니다.</p>
+                    <p>• <strong>조양가(朝阳街) & 소청리(所城里):</strong> 유럽풍 조명과 라이브 펍이 즐비한 조양가에서 연태 맥주 한잔 후, 청나라 정취가 살아있는 소청리 골목 야경 산책 (도보 10분 이동 가능).</p>
+                </div>
+                <div class="grid grid-cols-2 gap-2 pt-1 text-xs font-bold">
+                    <a href="https://map.baidu.com/search/烟台芝罘万达广场" target="_blank" rel="noopener noreferrer" class="bg-slate-100 hover:bg-slate-200 text-slate-800 py-2.5 rounded-xl text-center border border-slate-200">📍 완다플라자 위치</a>
+                    <a href="https://map.baidu.com/search/烟台朝阳街" target="_blank" rel="noopener noreferrer" class="bg-slate-100 hover:bg-slate-200 text-slate-800 py-2.5 rounded-xl text-center border border-slate-200">📍 조양가 위치</a>
+                </div>
+            </div>
         </section>
 
-        <!-- 2. Day 2 점심: 양마도 바다 해산물 (10곳) -->
-        <section id="sec-day2-lunch" class="space-y-4">
+        <!-- 🌊 DAY 2 SECTION (일요일: 양마도 힐링 & 스쿠터 일주 & 숯불 양꼬치) -->
+        <section id="sec-day2" class="space-y-4">
             <div class="flex items-center gap-2 pt-1">
-                <span class="bg-emerald-600 text-white text-xs font-black px-2 py-0.5 rounded">일요일 점심</span>
-                <h2 class="text-xl font-extrabold text-slate-900">🏝️ 2일차 점심: 양마도 갓 잡은 신선 어촌 밥상 (10곳)</h2>
+                <span class="bg-emerald-600 text-white text-xs font-black px-2.5 py-0.5 rounded">DAY 2</span>
+                <h2 class="text-xl font-extrabold text-slate-900">일요일: 양마도 힐링 & 스쿠터 일주</h2>
             </div>
-            <p class="text-xs text-slate-600">
-                동방의 몰디브 양마도에서 바다를 바라보며 즐기는 활어회, 성게, 가리비, 해물 철판찜 명가입니다.
-            </p>
-            <div id="list-day2-lunch" class="space-y-4"></div>
+
+            <!-- 스쿠터 대여 정보 카드 -->
+            <div class="bg-emerald-50 rounded-2xl p-4 border border-emerald-200 space-y-2.5">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-extrabold text-emerald-950 text-sm">🛵 양마도 스쿠터(전동 바이크) 실전 대여 팁</h3>
+                    <span class="bg-emerald-200 text-emerald-800 text-[10px] font-black px-2 py-0.5 rounded">필독</span>
+                </div>
+                <div class="space-y-1.5 text-xs text-emerald-900 leading-relaxed">
+                    <p>• <strong>이동 방법:</strong> 시내에서 버스는 1시간 반 넘게 걸려 체력이 소모됩니다. <strong>오전 9시 택시 출발(약 45분, 약 60~75위안)</strong>을 강력 추천합니다.</p>
+                    <p>• <strong>대여 장소:</strong> 양마도 대교를 건너자마자 상가와 해안가 진입로 곳곳에 전동 바이크 대여점이 줄지어 있습니다.</p>
+                    <p>• <strong>대여 비용:</strong> 1인승/2인승 기준 <strong>시간당 약 30~50위안</strong> / <strong>종일(하루 종일) 약 100~150위안</strong> 선 (상태에 따라 흥정 가능).</p>
+                    <p>• <strong>필수 체크:</strong> 여권 지참 필수, 헬멧 착용 필수, 출발 전 <strong>배터리 잔량 게이지</strong>와 <strong>브레이크 제동력</strong>을 꼭 확인하세요!</p>
+                </div>
+            </div>
+
+            <!-- 양마도 코스 4대 포인트 -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-2">
+                <div class="flex justify-between items-center text-xs text-emerald-800 font-bold bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
+                    <span>⏰ 오전 ~ 오후 추천 코스</span>
+                    <span>스쿠터 해안도로 질주 4선</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-xs text-slate-700 pt-1">
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">🌉 <strong>양마도 대교:</strong> 바다 위 뻥 뚫린 드라이브</div>
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">🌊 <strong>후해 (后海):</strong> 에메랄드빛 절벽 바다</div>
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">🔭 <strong>전망대:</strong> 해안선 한눈에 조망</div>
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">🏖️ <strong>해수욕장:</strong> 맑은 바다와 모래사장</div>
+                </div>
+            </div>
+
+            <!-- 양마도 점심 맛집 10선 -->
+            <div class="space-y-2">
+                <div class="flex justify-between items-center text-xs text-emerald-800 font-bold bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
+                    <span>⏰ 12:00 ~ 14:30 (양마도 점심)</span>
+                    <span>섬 안 해산물 & 어가식당 10선</span>
+                </div>
+                <p class="text-xs text-slate-500 px-1">
+                    동방의 몰디브 양마도에서 바다를 바라보며 즐기는 활어회, 성게, 가리비, 해물 철판찜 명가입니다.
+                </p>
+                <div id="list-day2-lunch" class="space-y-4 pt-1"></div>
+            </div>
+
+            <!-- 일요일 저녁 BBQ/양꼬치 맛집 10선 -->
+            <div class="space-y-2 pt-3">
+                <div class="flex justify-between items-center text-xs text-purple-800 font-bold bg-purple-50 px-3 py-1.5 rounded-xl border border-purple-200">
+                    <span>⏰ 17:30 ~ 21:30 (시내 복귀 저녁)</span>
+                    <span>숯불 양꼬치 & 야시장 핫플 10선</span>
+                </div>
+                <p class="text-xs text-slate-500 px-1">
+                    칭다오 생맥주와 함께 즐기는 육즙 팡팡 생양꼬치, 마늘구이, 해산물 숯불 바베큐 명가들입니다.
+                </p>
+                <div id="list-day2-dinner" class="space-y-4 pt-1"></div>
+            </div>
         </section>
 
-        <!-- 3. Day 2 저녁: 숯불 양꼬치 & 야시장 (10곳) -->
-        <section id="sec-day2-dinner" class="space-y-4">
-            <div class="flex items-center gap-2 pt-1">
-                <span class="bg-purple-600 text-white text-xs font-black px-2 py-0.5 rounded">일요일 저녁</span>
-                <h2 class="text-xl font-extrabold text-slate-900">🍢 2일차 저녁: 숯불 양꼬치 & 야시장 핫플 (10곳)</h2>
-            </div>
-            <p class="text-xs text-slate-600">
-                칭다오 생맥주와 함께 즐기는 육즙 팡팡 생양꼬치, 마늘구이, 해산물 숯불 바베큐 명가들입니다.
-            </p>
-            <div id="list-day2-dinner" class="space-y-4"></div>
-        </section>
-
-        <!-- 4. Day 3 아침: 로컬 조식 & 훈툰 (10곳) -->
+        <!-- 🏛️ DAY 3 SECTION (월요일: 연태산 산책 & 브런치/와인) -->
         <section id="sec-day3" class="space-y-4">
             <div class="flex items-center gap-2 pt-1">
-                <span class="bg-indigo-600 text-white text-xs font-black px-2 py-0.5 rounded">월요일 아침</span>
-                <h2 class="text-xl font-extrabold text-slate-900">🥣 3일차 아침: 뜨끈한 훈툰·샤오롱바오·도넛 (10곳)</h2>
+                <span class="bg-indigo-600 text-white text-xs font-black px-2.5 py-0.5 rounded">DAY 3</span>
+                <h2 class="text-xl font-extrabold text-slate-900">월요일: 연태산 산책 & 브런치/와인</h2>
             </div>
-            <p class="text-xs text-slate-600">
-                아침 일찍 문을 여는 30년 전통 완탕, 육즙 가득 샤오롱바오, 바삭한 요우티아오 명가들입니다.
-            </p>
-            <div id="list-day3-breakfast" class="space-y-4"></div>
+
+            <!-- 월요일 모닝/브런치/조식 10선 -->
+            <div class="space-y-2">
+                <div class="flex justify-between items-center text-xs text-indigo-800 font-bold bg-indigo-50 px-3 py-1.5 rounded-xl border border-indigo-200">
+                    <span>⏰ 08:00 ~ 09:30 (아침 & 조식)</span>
+                    <span>로컬 아침·해장·브런치 10선</span>
+                </div>
+                <p class="text-xs text-slate-500 px-1">
+                    아침 일찍 문을 여는 30년 전통 완탕, 육즙 가득 샤오롱바오, 바삭한 요우티아오 명가들입니다.
+                </p>
+                <div id="list-day3-breakfast" class="space-y-4 pt-1"></div>
+            </div>
+
+            <!-- 연태산 & 장위 박물관 -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
+                <div class="flex justify-between items-center text-xs text-indigo-800 font-bold bg-indigo-50 px-3 py-1.5 rounded-xl border border-indigo-200">
+                    <span>⏰ 09:30 ~ 12:30 (오전 산책 & 관광)</span>
+                    <span>연태산 & 장위 와인 문화 박물관</span>
+                </div>
+                <div class="space-y-2 text-xs text-slate-600 leading-relaxed">
+                    <p>• <strong>연태산 (烟台山):</strong> 1시간 코스의 상쾌한 아침 산책길. 정상의 등대와 옛 영사관 건축물, 시원한 바다 뷰가 멋집니다.</p>
+                    <p>• <strong>장위 와인 문화 박물관 (张裕酒文化博物馆):</strong> 중국 최초의 와인 브랜드 본산. 100년 넘은 지하 와인 저장고와 와인 시음 가능.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-2 pt-1 text-xs font-bold">
+                    <a href="https://map.baidu.com/search/烟台山景区" target="_blank" rel="noopener noreferrer" class="bg-slate-100 hover:bg-slate-200 text-slate-800 py-2.5 rounded-xl text-center border border-slate-200">📍 연태산 위치</a>
+                    <a href="https://map.baidu.com/search/张裕酒文化博物馆" target="_blank" rel="noopener noreferrer" class="bg-slate-100 hover:bg-slate-200 text-slate-800 py-2.5 rounded-xl text-center border border-slate-200">📍 장위박물관 위치</a>
+                </div>
+            </div>
+
+            <!-- 귀국 안내 -->
+            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 space-y-1.5 text-xs text-slate-600">
+                <div class="flex justify-between items-center">
+                    <span class="font-extrabold text-slate-900">✈️ 13:00 ~ 공항 이동 & 귀국</span>
+                    <span class="text-[10px] text-slate-400">수속 2시간 전 도착 권장</span>
+                </div>
+                <p>호텔 체크아웃 후 택시로 펑라이 공항 이동(약 45분). 수진이와 함께 즐거운 2박 3일 추억을 안고 안전하게 귀국!</p>
+            </div>
         </section>
 
     </main>
@@ -1057,95 +1219,86 @@
             const activeBtn = document.getElementById(`tab-${tab}`);
             if (activeBtn) activeBtn.classList.add('active');
 
+            const secOverview = document.getElementById('sec-itinerary-overview');
+            const secDay1 = document.getElementById('sec-day1');
+            const secDay2 = document.getElementById('sec-day2');
+            const secDay3 = document.getElementById('sec-day3');
             const secRomance = document.getElementById('sec-romance');
             const secDessert = document.getElementById('sec-dessert');
             const secLiquor = document.getElementById('sec-liquor');
-            const secDay1 = document.getElementById('sec-day1');
-            const secDay2Lunch = document.getElementById('sec-day2-lunch');
-            const secDay2Dinner = document.getElementById('sec-day2-dinner');
-            const secDay3 = document.getElementById('sec-day3');
             const emptyNotice = document.getElementById('favEmptyNotice');
 
             emptyNotice.classList.add('hidden');
 
             if (tab === 'all') {
+                secOverview.style.display = 'block';
+                secDay1.style.display = 'block';
+                secDay2.style.display = 'block';
+                secDay3.style.display = 'block';
                 secRomance.style.display = 'block';
                 secDessert.style.display = 'block';
                 secLiquor.style.display = 'block';
-                secDay1.style.display = 'block';
-                secDay2Lunch.style.display = 'block';
-                secDay2Dinner.style.display = 'block';
-                secDay3.style.display = 'block';
                 document.querySelectorAll('.rest-card').forEach(card => card.style.display = 'block');
-            } else if (tab === 'fav') {
+            } else if (tab === 'day1') {
+                secOverview.style.display = 'none';
+                secDay1.style.display = 'block';
+                secDay2.style.display = 'none';
+                secDay3.style.display = 'none';
                 secRomance.style.display = 'none';
                 secDessert.style.display = 'none';
                 secLiquor.style.display = 'none';
-                secDay1.style.display = 'block';
-                secDay2Lunch.style.display = 'block';
-                secDay2Dinner.style.display = 'block';
+                document.querySelectorAll('#list-day1 .rest-card').forEach(card => card.style.display = 'block');
+            } else if (tab === 'day2') {
+                secOverview.style.display = 'none';
+                secDay1.style.display = 'none';
+                secDay2.style.display = 'block';
+                secDay3.style.display = 'none';
+                secRomance.style.display = 'none';
+                secDessert.style.display = 'none';
+                secLiquor.style.display = 'none';
+                document.querySelectorAll('#list-day2-lunch .rest-card, #list-day2-dinner .rest-card').forEach(card => card.style.display = 'block');
+            } else if (tab === 'day3') {
+                secOverview.style.display = 'none';
+                secDay1.style.display = 'none';
+                secDay2.style.display = 'none';
                 secDay3.style.display = 'block';
+                secRomance.style.display = 'none';
+                secDessert.style.display = 'none';
+                secLiquor.style.display = 'none';
+                document.querySelectorAll('#list-day3-breakfast .rest-card').forEach(card => card.style.display = 'block');
+            } else if (tab === 'fav') {
+                secOverview.style.display = 'none';
+                secDay1.style.display = 'block';
+                secDay2.style.display = 'block';
+                secDay3.style.display = 'block';
+                secRomance.style.display = 'none';
+                secDessert.style.display = 'none';
+                secLiquor.style.display = 'none';
                 filterFavoritesTab();
             } else if (tab === 'romance') {
+                secOverview.style.display = 'none';
+                secDay1.style.display = 'none';
+                secDay2.style.display = 'none';
+                secDay3.style.display = 'none';
                 secRomance.style.display = 'block';
                 secDessert.style.display = 'none';
                 secLiquor.style.display = 'none';
-                secDay1.style.display = 'none';
-                secDay2Lunch.style.display = 'none';
-                secDay2Dinner.style.display = 'none';
-                secDay3.style.display = 'none';
             } else if (tab === 'dessert') {
+                secOverview.style.display = 'none';
+                secDay1.style.display = 'none';
+                secDay2.style.display = 'none';
+                secDay3.style.display = 'none';
                 secRomance.style.display = 'none';
                 secDessert.style.display = 'block';
                 secLiquor.style.display = 'none';
-                secDay1.style.display = 'none';
-                secDay2Lunch.style.display = 'none';
-                secDay2Dinner.style.display = 'none';
-                secDay3.style.display = 'none';
             } else if (tab === 'liquor') {
+                secOverview.style.display = 'none';
+                secDay1.style.display = 'none';
+                secDay2.style.display = 'none';
+                secDay3.style.display = 'none';
                 secRomance.style.display = 'none';
                 secDessert.style.display = 'none';
                 secLiquor.style.display = 'block';
-                secDay1.style.display = 'none';
-                secDay2Lunch.style.display = 'none';
-                secDay2Dinner.style.display = 'none';
-                secDay3.style.display = 'none';
-            } else if (tab === 'day1') {
-                secRomance.style.display = 'none';
-                secDessert.style.display = 'none';
-                secLiquor.style.display = 'none';
-                secDay1.style.display = 'block';
-                secDay2Lunch.style.display = 'none';
-                secDay2Dinner.style.display = 'none';
-                secDay3.style.display = 'none';
-                document.querySelectorAll('#list-day1 .rest-card').forEach(card => card.style.display = 'block');
-            } else if (tab === 'day2_lunch') {
-                secRomance.style.display = 'none';
-                secDessert.style.display = 'none';
-                secLiquor.style.display = 'none';
-                secDay1.style.display = 'none';
-                secDay2Lunch.style.display = 'block';
-                secDay2Dinner.style.display = 'none';
-                secDay3.style.display = 'none';
-                document.querySelectorAll('#list-day2-lunch .rest-card').forEach(card => card.style.display = 'block');
-            } else if (tab === 'day2_dinner') {
-                secRomance.style.display = 'none';
-                secDessert.style.display = 'none';
-                secLiquor.style.display = 'none';
-                secDay1.style.display = 'none';
-                secDay2Lunch.style.display = 'none';
-                secDay2Dinner.style.display = 'block';
-                secDay3.style.display = 'none';
-                document.querySelectorAll('#list-day2-dinner .rest-card').forEach(card => card.style.display = 'block');
-            } else if (tab === 'day3') {
-                secRomance.style.display = 'none';
-                secDessert.style.display = 'none';
-                secLiquor.style.display = 'none';
-                secDay1.style.display = 'none';
-                secDay2Lunch.style.display = 'none';
-                secDay2Dinner.style.display = 'none';
-                secDay3.style.display = 'block';
-                document.querySelectorAll('#list-day3-breakfast .rest-card').forEach(card => card.style.display = 'block');
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
